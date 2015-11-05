@@ -1,0 +1,2 @@
+ErrorDocument 403 /sChat/index.php
+ErrorDocument 404 /sChat/index.php

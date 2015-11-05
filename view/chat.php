@@ -1,0 +1,1 @@
+<div id="chat" class="container-fluid">chat</div>
