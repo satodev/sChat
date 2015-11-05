@@ -33,6 +33,7 @@ TODOLIST
  [ ] Message
  [ ] Session
 
+
 RANDOM ALGO
 ===============================================================================
 user doesn't exists -> register -> user exists
@@ -47,3 +48,7 @@ table -> messages : id, id_chat, content, date
 table -> group : id, id_user, group_size
 
 (group > user) <link> (rooms > chat > messages)
+
+#Enhance Reame.md
+https://guides.github.com/features/mastering-markdown/
+http://www.emoji-cheat-sheet.com/
