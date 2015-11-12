@@ -49,12 +49,6 @@ email|configuration_chat|id_group|msg_content|||
 ip_addr|configuration_users||date_sent|||
 passwor||||||
 
-table -> user : id, nickname, name, password (md5 and shit), email, ip_address
-table -> rooms : id, id_group, id_user, nb_user, session_activity
-table -> chat : data, msg_content, user_id, room_id, group_id
-table -> messages : id, id_chat, content, date
-table -> group : id, id_user, group_size
-
 (group > user) <link> (rooms > chat > messages)
 
 #Enhance Reame.md
