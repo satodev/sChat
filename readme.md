@@ -1,16 +1,30 @@
 #CONSTRUCT System 
 
-Session {group[user] <-> message <-> group[user]}
+Rooms {group[user] <-> message <-> group[user]}
 
-what is session ? 
-A place where a bunch of users can send message together, it can be a lot of sessions.
+### Rooms 
 
-what is message ? 
+The overview of all chat avaible including all the configuration of them.
+
+### Message 
+
 A sending unit that can contain a lot of type of media : text mainly, but also images , sound, link and other...
 
-what is user ? 
+### User 
+
 An loged entity that have personnal informations.
 
+### A group
+
+A list regrouping, friend list, nearby users, recently seen user, for each users
+
+### Chat
+
+The interface that allow user/group to communicate with each other.
+
+### Security_System
+
+A very basic security system.
 
 #ARCHITECTURE
 
@@ -25,7 +39,7 @@ An loged entity that have personnal informations.
 	}
 
 
-#TODOLIST
+#TODOLIST/IMPROVEMENTS
 
 - [ ] User
 - [ ] Group
