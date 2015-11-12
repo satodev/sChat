@@ -48,9 +48,9 @@ user|rooms|chat|message|group|security_system
 ----|-----|----|-------|-----|---------------
 id_user	|id_room	|id_chat	|id_msg	|id_group	|id_user	|
 name	|id_chat	|id_leader	|from_user	|friend_list	|token_key	|
-nickname	|configuration_room	|id_user_invite	|nearby_user	|to_user	|	|
-email	|configuration_chat	|id_group	|	|seen_uder	|	|
-ip_addr	|configuration_users	|	|	|msg_content	|	|
+nickname	|conf_room	|id_user_invite	|nearby_user	|to_user	|	|
+email	|conf_chat	|id_group	|	|seen_uder	|	|
+ip_addr	|conf_users	|	|	|msg_content	|	|
 password	|	|	|	|date_sent	|	|
 
 (group > user) <link> (rooms > chat > messages)
