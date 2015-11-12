@@ -49,8 +49,9 @@ A very basic security system.
 
 #RANDOM ALGO && SELFASKS
 
-user doesn't exists -> register -> user exists
-when init dB ? user && group making || rooms && chat && messages 
+User doesn't exists -> register -> user exists
+
+When init dB ? user && group making || rooms && chat && messages 
 
 #DATABASE OVERVIEW
 
@@ -67,4 +68,5 @@ passwor||||||
 
 #Enhance Reame.md
 https://guides.github.com/features/mastering-markdown/
+
 http://www.emoji-cheat-sheet.com/
