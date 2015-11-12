@@ -1,33 +1,25 @@
 #CONSTRUCT System 
-
 Rooms {group[user] <-> message <-> group[user]}
 
 ### Rooms 
-
 The overview of all chat avaible including all the configuration of them.
 
 ### Message 
-
 A sending unit that can contain a lot of type of media : text mainly, but also images , sound, link and other...
 
 ### User 
-
 An loged entity that have personnal informations.
 
 ### A group
-
 A list regrouping, friend list, nearby users, recently seen user, for each users
 
 ### Chat
-
 The interface that allow user/group to communicate with each other.
 
 ### Security_System
-
 A very basic security system.
 
 #ARCHITECTURE
-
 	- Main{
 		class Register{}
 		class User{}
@@ -40,7 +32,6 @@ A very basic security system.
 
 
 #TODOLIST/IMPROVEMENTS
-
 - [ ] User
 - [ ] Group
 - [ ] Message
@@ -48,13 +39,11 @@ A very basic security system.
 
 
 #RANDOM ALGO && SELFASKS
-
 User doesn't exists -> register -> user exists
 
 When init dB ? user && group making || rooms && chat && messages 
 
 #DATABASE OVERVIEW
-
 user|rooms|chat|message|group|security_system
 ----|-----|----|-------|-----|---------------
 id_user|id_room|id_chat|id_msg|friend_list|id_user|
