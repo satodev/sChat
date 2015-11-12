@@ -1,5 +1,4 @@
-CONSTRUCT System 
-===============================================================================
+#CONSTRUCT System 
 
 Session {group[user] <-> message <-> group[user]}
 
@@ -13,8 +12,8 @@ what is user ?
 An loged entity that have personnal informations.
 
 
-ARCHITECTURE
-===============================================================================
+#ARCHITECTURE
+
 	- Main{
 		class Register{}
 		class User{}
@@ -26,22 +25,31 @@ ARCHITECTURE
 	}
 
 
-TODOLIST
-===============================================================================
- [ ] User
- [ ] Group
- [ ] Message
- [ ] Session
+#TODOLIST
+
+- [ ] User
+- [ ] Group
+- [ ] Message
+- [ ] Session
 
 
-RANDOM ALGO
-===============================================================================
+#RANDOM ALGO && SELFASKS
+
 user doesn't exists -> register -> user exists
 when init dB ? user && group making || rooms && chat && messages 
 
-DATABASE OVERVIEW
-===============================================================================
-table -> user : columns: id, nickname, name, password (md5 and shit), email, ip_address
+#DATABASE OVERVIEW
+
+user|rooms|chat|message|group|security_system
+----|-----|----|-------|-----|---------------
+id_user|id_room|id_chat|id_msg|id_user|
+name|id_chat|id_leader|from_user|token_key|
+nickname|configuration_room|id_user_invite|to_user||
+email|configuration_chat|id_group|msg_content||
+ip_addr|configuration_users||date_sent||
+passwor|||||
+
+table -> user : id, nickname, name, password (md5 and shit), email, ip_address
 table -> rooms : id, id_group, id_user, nb_user, session_activity
 table -> chat : data, msg_content, user_id, room_id, group_id
 table -> messages : id, id_chat, content, date
