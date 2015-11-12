@@ -42,12 +42,12 @@ when init dB ? user && group making || rooms && chat && messages
 
 user|rooms|chat|message|group|security_system
 ----|-----|----|-------|-----|---------------
-id_user|id_room|id_chat|id_msg|id_user|
-name|id_chat|id_leader|from_user|token_key|
-nickname|configuration_room|id_user_invite|to_user||
-email|configuration_chat|id_group|msg_content||
-ip_addr|configuration_users||date_sent||
-passwor|||||
+id_user|id_room|id_chat|id_msg|friend_list|id_user|
+name|id_chat|id_leader|from_user|nearby_user|token_key|
+nickname|configuration_room|id_user_invite|seen_uder|to_user||
+email|configuration_chat|id_group|msg_content|||
+ip_addr|configuration_users||date_sent|||
+passwor||||||
 
 table -> user : id, nickname, name, password (md5 and shit), email, ip_address
 table -> rooms : id, id_group, id_user, nb_user, session_activity
