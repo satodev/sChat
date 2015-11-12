@@ -46,12 +46,12 @@ When init dB ? user && group making || rooms && chat && messages
 #DATABASE OVERVIEW
 user|rooms|chat|message|group|security_system
 ----|-----|----|-------|-----|---------------
-id_user|id_room|id_chat|id_msg|friend_list|id_user|
-name|id_chat|id_leader|from_user|nearby_user|token_key|
-nickname|configuration_room|id_user_invite|seen_uder|to_user||
-email|configuration_chat|id_group|msg_content|||
-ip_addr|configuration_users||date_sent|||
-passwor||||||
+id_user	|id_room	|id_chat	|id_msg	|id_group	|id_user	|
+name	|id_chat	|id_leader	|from_user	|friend_list	|token_key	|
+nickname	|configuration_room	|id_user_invite	|nearby_user	|to_user	|	|
+email	|configuration_chat	|id_group	|	|seen_uder	|	|
+ip_addr	|configuration_users	|	|	|	|msg_content	|
+passwor	|	|	|	|	|date_sent	|
 
 (group > user) <link> (rooms > chat > messages)
 
