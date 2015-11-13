@@ -15,7 +15,7 @@ class Database
 		try{
 			$pdo = new PDO($dsn,$user,$passwd);
 		}catch(Exception $e){
-			echo $e->getMessage();;
+			echo $e->getMessage();
 		}
 		return $pdo;
 	}
@@ -34,13 +34,7 @@ class Database
 	public function querySelectAllDataTable($pdo_object, $table)
 	{
 		if($pdo_object){
-		// $query = 'SELECT * FROM '.$table;
-		// $results = $pdo_object->query($query, PDO::FETCH_INTO , $obj);
-		// 	foreach($results as $row){
-		// 		echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
-		// 		var_dump($row);
-		// 		echo '</pre>';
-		// 	}
+			
 		}
 	}
 	public function queryCreateUsers($pdo_object)
