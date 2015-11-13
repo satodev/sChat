@@ -22,12 +22,12 @@ class Database
 	public function createAllStructure($pdo_object)
 	{
 		if($pdo_object){
-				$query_Create_Users_structure = $this->queryCreateUsers($pdo_object);
-				$query_Create_Chat_structure = $this->queryCreateChat($pdo_object);
-				$query_Create_Group_structure = $this->queryCreateGroup($pdo_object);
-				$query_Create_Rooms_structure = $this->queryCreateRooms($pdo_object);
-				$query_Create_Message_structure = $this->queryCreateMessage($pdo_object);
-				$query_Create_SecuritySystem_structure = $this->queryCreateSecuritySystem($pdo_object);
+			$query_Create_Users_structure = $this->queryCreateUsers($pdo_object);
+			$query_Create_Chat_structure = $this->queryCreateChat($pdo_object);
+			$query_Create_Group_structure = $this->queryCreateGroup($pdo_object);
+			$query_Create_Rooms_structure = $this->queryCreateRooms($pdo_object);
+			$query_Create_Message_structure = $this->queryCreateMessage($pdo_object);
+			$query_Create_SecuritySystem_structure = $this->queryCreateSecuritySystem($pdo_object);
 		}
 		return array($query_Create_Users_structure, $query_Create_Chat_structure, $query_Create_Group_structure, $query_Create_Rooms_structure, $query_Create_Message_structure, $query_Create_SecuritySystem_structure);
 	}
@@ -35,11 +35,23 @@ class Database
 	{
 		if($pdo_object){
 			$sql = 'SELECT * FROM '.$table;
+			$pattern = '#[[0-9]*#';
+
+			echo '<table class="table table-bordered table-hover" style="width:100%;">';
+
 			foreach($pdo_object->query($sql) as $row){
-				echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
-				var_dump($row);
-				echo '</pre>';
+				echo '<tr>';
+				foreach($row as $key=>$value){
+					if(is_string($key)){
+						echo '<td>';
+						echo $key. " : ";
+						echo $value;
+						echo '</td>';
+					}
+				}
+				echo '</tr>';
 			}
+			echo '</tabe>';
 		}
 	}
 	public function queryCreateUsers($pdo_object)
@@ -53,75 +65,75 @@ class Database
 			ip_address VARCHAR(100)
 			)')){
 			return true;
-		}else{
-			return false;
-		}
+	}else{
+		return false;
 	}
-	public function queryCreateChat($pdo_object)
-	{
-		if($pdo_object->exec('CREATE TABLE IF NOT EXISTS chat(
-			id_chat INT PRIMARY KEY NOT NULL,
-			id_leader INT NOT NULL,
-			id_invite INT NOT NULL,
-			id_group INT NOT NULL
-			)')){
-			return true;
-		}else{
-			return false;
-		}
-	}
-	public function queryCreateGroup($pdo_object)
-	{
-		if($pdo_object->exec('CREATE TABLE IF NOT EXISTS groups(
-			id_group INT PRIMARY KEY NOT NULL,
-			friend_list VARCHAR(255),
-			nearby_user VARCHAR(255),
-			seen_user VARCHAR(255)
-			)')){
-			return true;
-		}else{
-			return false;
-		}
-	}
-	public function queryCreateRooms($pdo_object)
-	{
-		if($pdo_object->exec('CREATE TABLE IF NOT EXISTS rooms(
-			id_room INT PRIMARY KEY NOT NULL,
-			id_chat INT NOT NULL, 
-			conf_room INT NOT NULL,
-			conf_chats INT NOT NULL,
-			conf_users BOOLEAN NOT NULL
-			)')){
-			return true;
-		}else{
-			return false;
-		}
-	}
-	public function queryCreateMessage($pdo_object)
-	{
-		if($pdo_object->exec('CREATE TABLE IF NOT EXISTS messages(
-			id_msg INT PRIMARY KEY NOT NULL,
-			from_user INT NOT NULL,
-			to_user INT NOT NULL,
-			msg_content VARCHAR(255) NOT NULL,
-			date_sent DATE NOT NULL,
-			time_sent TIME NOT NULL
-			)')){
-			return true;
-		}else{
-			return false;
-		}
-	}
-	public function queryCreateSecuritySystem($pdo_object)
-	{
-		if($pdo_object->exec('CREATE TABLE IF NOT EXISTS security_systems(
-			id_skey INT PRIMARY KEY NOT NULL ,
-			id_user INT NOT NULL ,
-			token_key INT NOT NULL
-			)')){
-			return true;
-		}else{
-			return false;
-		}
-	}
+}
+public function queryCreateChat($pdo_object)
+{
+	if($pdo_object->exec('CREATE TABLE IF NOT EXISTS chat(
+		id_chat INT PRIMARY KEY NOT NULL,
+		id_leader INT NOT NULL,
+		id_invite INT NOT NULL,
+		id_group INT NOT NULL
+		)')){
+		return true;
+}else{
+	return false;
+}
+}
+public function queryCreateGroup($pdo_object)
+{
+	if($pdo_object->exec('CREATE TABLE IF NOT EXISTS groups(
+		id_group INT PRIMARY KEY NOT NULL,
+		friend_list VARCHAR(255),
+		nearby_user VARCHAR(255),
+		seen_user VARCHAR(255)
+		)')){
+		return true;
+}else{
+	return false;
+}
+}
+public function queryCreateRooms($pdo_object)
+{
+	if($pdo_object->exec('CREATE TABLE IF NOT EXISTS rooms(
+		id_room INT PRIMARY KEY NOT NULL,
+		id_chat INT NOT NULL, 
+		conf_room INT NOT NULL,
+		conf_chats INT NOT NULL,
+		conf_users BOOLEAN NOT NULL
+		)')){
+		return true;
+}else{
+	return false;
+}
+}
+public function queryCreateMessage($pdo_object)
+{
+	if($pdo_object->exec('CREATE TABLE IF NOT EXISTS messages(
+		id_msg INT PRIMARY KEY NOT NULL,
+		from_user INT NOT NULL,
+		to_user INT NOT NULL,
+		msg_content VARCHAR(255) NOT NULL,
+		date_sent DATE NOT NULL,
+		time_sent TIME NOT NULL
+		)')){
+		return true;
+}else{
+	return false;
+}
+}
+public function queryCreateSecuritySystem($pdo_object)
+{
+	if($pdo_object->exec('CREATE TABLE IF NOT EXISTS security_systems(
+		id_skey INT PRIMARY KEY NOT NULL ,
+		id_user INT NOT NULL ,
+		token_key INT NOT NULL
+		)')){
+		return true;
+}else{
+	return false;
+}
+}
 }
