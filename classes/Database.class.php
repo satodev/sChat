@@ -28,7 +28,10 @@ class Database
 	public function callQueryInsertUser($nickname, $name, $password, $email, $ip_address)
 	{
 		$pdo_object = $this->pdo_object;
-		$this->queryInsertUser($pdo_object, $nickname, $name, $password, $email, $ip_address);
+		$user_data_correct = $this->verifUserDataCorrect($nickname, $name, $password, $email, $ip_address);
+		if($user_data_correct){
+			$this->queryInsertUser($pdo_object, $nickname, $name, $password, $email, $ip_address);
+		}
 	}
 	/*
 	*	connect to sgbd
@@ -103,7 +106,7 @@ class Database
 	{
 		if($pdo_object && $nickname && $name && $password && $email && $ip_address){
 			$user_exists = $this->queryVerifUserExists($pdo_object, $nickname, $name, $password, $email, $ip_address);
-			if($user_exists == false){
+			if($user_exists == false && $user_data_correct){
 				$q = $pdo_object->prepare('INSERT INTO users (nickname, name, password, email, ip_address)
 					VALUES (
 						:nickname,
@@ -112,9 +115,6 @@ class Database
 						:email,
 						:ip_address
 						)');
-				echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
-				var_dump($q);
-				echo '</pre>';
 				$q->bindParam(':nickname', $nickname,PDO::PARAM_STR);
 				$q->bindParam(':name', $name, PDO::PARAM_STR);
 				$q->bindParam(':password', $password, PDO::PARAM_STR);
@@ -122,14 +122,13 @@ class Database
 				$q->bindParam(':ip_address', $ip_address, PDO::PARAM_STR);
 				$q->execute();
 			}else if($user_exists){
-				echo '<div class="container-fluid">
-						<p class="col-xs-1 col-sm-1 col-md-1 col-lg-1 bg-primary center-block" style="text-align:center">
-							USER EXISTS
-						</p>
-					  </div>';
+				Tools::throwWarningMessage('user exists');
 			}
 		}
 	}
+	/*
+	*	Verif if user exists in DB
+	*/
 	public function queryVerifUserExists($pdo_object, $nickname, $name, $password, $email, $ip_address)
 	{
 		if($pdo_object && $nickname && $name && $password && $email && $ip_address)
@@ -145,6 +144,23 @@ class Database
 				return false;
 			}
 		}
+	}
+	/*
+	*	verif all data before user insert to db
+	*   allinfocorrect? return true: echo 'noncorrectData'
+	*/
+	public function verifUserDataCorrect($nickname, $name, $password, $email, $ip_address)
+	{
+		//nickname must be string && must be longer than 100 char && must start with a letter 
+
+		//name follow same rules as nickname 
+
+		//password must be max 100 char, min 8 char, have letters uppercase en lowercase, have at least one number and one special char
+
+		//email must be a valid email address
+
+		//ip_address is automatically retreived from user machine
+		return true;
 	}
 	/*
 	*	Create Table Users
