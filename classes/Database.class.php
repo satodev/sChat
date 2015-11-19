@@ -1,12 +1,13 @@
 <?php
 class Database
 {
+
 	public function __construct()
 	{
 		$pdo_object = $this->connect();
 		$create_all_structure = $this->createAllStructure($pdo_object);
 		// $this->querySelectAllDataTable($pdo_object, 'user');	
-		$this->queryInsertUser($pdo_object,'SynToX','Sato','sat','s.hem@gmail.com','192.168.1.2');
+		$this->queryInsertUser($pdo_object,'SynToX','Sato','sat','s.hemmi@gmail.com','192.168.1.3');
 	}
 	/*
 	*	connect to sgbd
@@ -45,7 +46,7 @@ class Database
 	*	Destoy all DB structures
 	*	@args pdo_object
 	*/
-	public function destroyAllStructure($pdo_object)
+	public function destroyAllStructure()
 	{
 
 	}
@@ -54,7 +55,7 @@ class Database
 	*	@args pdo_object && table name
 	*	echo table with data selected
 	*/
-	public function querySelectAllDataTable($pdo_object, $table)
+	public function querySelectAllDataTable($pdo_object,$table)
 	{
 		if($pdo_object){
 			$sql = 'SELECT * FROM '.$table;
@@ -81,7 +82,7 @@ class Database
 	{
 		if($pdo_object && $nickname && $name && $password && $email && $ip_address){
 			$user_exists = $this->queryVerifUserExists($pdo_object, $nickname, $name, $password, $email, $ip_address);
-			if(!$user_exists){
+			if($user_exists == false){
 				$q = $pdo_object->prepare('INSERT INTO users (nickname, name, password, email, ip_address)
 					VALUES (
 						:nickname,
@@ -90,29 +91,34 @@ class Database
 						:email,
 						:ip_address
 						)');
-				$q->bindParam(':nickname', $nickname, PDO::PARAM_STR);
+				echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
+				var_dump($q);
+				echo '</pre>';
+				$q->bindParam(':nickname', $nickname,PDO::PARAM_STR);
 				$q->bindParam(':name', $name, PDO::PARAM_STR);
 				$q->bindParam(':password', $password, PDO::PARAM_STR);
 				$q->bindParam(':email', $email, PDO::PARAM_STR);
 				$q->bindParam(':ip_address', $ip_address, PDO::PARAM_STR);
 				$q->execute();
+			}else if($user_exists){
+				echo 'user exists';
 			}
 		}
 	}
-	public function queryVerifUserExists($pdo_object, $nickname, $name, $password, $email, $ip_address)
+	public function queryVerifUserExists($nickname, $name, $password, $email, $ip_address)
 	{
 		if($pdo_object && $nickname && $name && $password && $email && $ip_address)
 		{
-			$q = $pdo_object->prepare('SELECT :email, :ip_address FROM users');
+			$q = $pdo_object->prepare('SELECT * FROM users WHERE ip_address = :ip_address AND email = :email');
 			$q->bindParam(':email', $email, PDO::PARAM_STR);
 			$q->bindParam(':ip_address', $ip_address, PDO::PARAM_STR);
-			if($q->execute()){
+			$q->execute();
 				$result = $q->fetch(PDO::FETCH_ASSOC);
-				echo '<pre>';
-				var_dump($result);
-				echo '</pre>';
+			if($result['email']&& $result['ip_address']){
+				return true;
+			}else{
+				return false;
 			}
-
 		}
 	}
 	/*
@@ -120,7 +126,7 @@ class Database
 	*	@args $pdo_object
 	*	return query_status? true:false
 	*/
-	public function queryCreateUsers($pdo_object)
+	public function queryCreateUsers()
 	{
 		if($pdo_object->exec('CREATE TABLE IF NOT EXISTS users(
 			id_user INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -141,7 +147,7 @@ class Database
 	*	@args $pdo_object
 	*	return query_status? true:false
 	*/
-	public function queryCreateChats($pdo_object)
+	public function queryCreateChats()
 	{
 		if($pdo_object->exec('CREATE TABLE IF NOT EXISTS chats(
 			id_chat INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -160,7 +166,7 @@ class Database
 	*	@args $pdo_object
 	*	return query_status? true:false
 	*/
-	public function queryCreateGroups($pdo_object)
+	public function queryCreateGroups()
 	{
 		if($pdo_object->exec('CREATE TABLE IF NOT EXISTS groups(
 			id_group INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -179,7 +185,7 @@ class Database
 	*	@args $pdo_object
 	*	return query_status? true:false
 	*/
-	public function queryCreateRooms($pdo_object)
+	public function queryCreateRooms()
 	{
 		if($pdo_object->exec('CREATE TABLE IF NOT EXISTS rooms(
 			id_room INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -199,7 +205,7 @@ class Database
 	*	@args $pdo_object
 	*	return query_status? true:false
 	*/
-	public function queryCreateMessages($pdo_object)
+	public function queryCreateMessages()
 	{
 		if($pdo_object->exec('CREATE TABLE IF NOT EXISTS messages(
 			id_msg INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -220,7 +226,7 @@ class Database
 	*	@args $pdo_object
 	*	return query_status? true:false
 	*/
-	public function queryCreateSecuritySystems($pdo_object)
+	public function queryCreateSecuritySystems()
 	{
 		if($pdo_object->exec('CREATE TABLE IF NOT EXISTS security_systems(
 			id_skey INT PRIMARY KEY NOT NULL  AUTO_INCREMENT,
