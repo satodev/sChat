@@ -43,6 +43,55 @@ User doesn't exists -> register -> user exists
 
 When init dB ? user && group making || rooms && chat && messages 
 
+Db problem : all functions are dependant to  `$pdo_object`, to call them externally to the Class, how you we do, without having the arguments ? 
+
+```php
+class Db{
+	/*
+	* Problem 
+	*/
+	function __construct()
+	{
+		$datArg = necessarySuff();
+		randomDbFunction($datArg);	
+	}
+	function randomDbFunction(randomArgDependant)
+	{
+		//randomCodeWithArgDependant
+	}
+	/*
+	* Solution 1
+	* Proceed the same way for each functions
+	* Negative factor : performance loss
+	* Positive factor : general isolation
+	*/
+	function callToRandomFunctions()
+	{
+		$datArg = necessarySuff();
+		randomDbFunction($datArg);	
+	}
+	/*
+	* Solution 2
+	* Negative factor : not sure if it's stable (depending on context)
+	* Positive factor : general isolation plus functionnal programming respectfull
+	*/
+	private datArg;
+	function __construct()
+	{
+		$this->datArg = necessarySuff();
+		$this->callToRandomFunction();
+	}
+	function callToRandomFunction()
+	{
+		randomDbFunction($this->datArg);
+	}
+	function randomDbFunction($this->datArg)
+	{
+		//randomCodeWithArgDependant
+	}
+}
+```
+
 #DATABASE OVERVIEW
 user|rooms|chat|message|group|security_system
 ----|-----|----|-------|-----|---------------
