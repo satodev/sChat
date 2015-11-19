@@ -1,12 +1,34 @@
 <?php
 class Database
 {
+	private $pdo_object;
 	public function __construct()
 	{
-		$pdo_object = $this->connect();
-		$create_all_structure = $this->createAllStructure($pdo_object);
+		$this->pdo_object = $this->connect();
+
+		$this->callCreateAllStructure();
 		// $this->querySelectAllDataTable($pdo_object, 'user');	
-		$this->queryInsertUser($pdo_object,'SynToX','Sato','sat','s.hemmi@gmail.com','192.168.1.3');
+		$this->callQueryInsertUser('SynToX','Sato','sat','s.hemmi@gmail.com','192.168.1.3');
+	}
+	/*
+	* pdo_dependant functions
+	* call to CreateAllStructure 
+	* create variable of controll
+	*/
+	public function callCreateAllStructure()
+	{
+		$pdo_object = $this->pdo_object;
+		$create_all_structure = $this->createAllStructure($pdo_object);
+	}
+	/*
+	* pdo_dependant function
+	* args dynInfo related to users insertion
+	* call to queryInsertUser
+	*/
+	public function callQueryInsertUser($nickname, $name, $password, $email, $ip_address)
+	{
+		$pdo_object = $this->pdo_object;
+		$this->queryInsertUser($pdo_object, $nickname, $name, $password, $email, $ip_address);
 	}
 	/*
 	*	connect to sgbd
@@ -100,7 +122,11 @@ class Database
 				$q->bindParam(':ip_address', $ip_address, PDO::PARAM_STR);
 				$q->execute();
 			}else if($user_exists){
-				echo 'user exists';
+				echo '<div class="container-fluid">
+						<p class="col-xs-1 col-sm-1 col-md-1 col-lg-1 bg-primary center-block" style="text-align:center">
+							USER EXISTS
+						</p>
+					  </div>';
 			}
 		}
 	}
