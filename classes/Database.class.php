@@ -1,7 +1,6 @@
 <?php
 class Database
 {
-
 	public function __construct()
 	{
 		$pdo_object = $this->connect();
@@ -105,7 +104,7 @@ class Database
 			}
 		}
 	}
-	public function queryVerifUserExists($nickname, $name, $password, $email, $ip_address)
+	public function queryVerifUserExists($pdo_object, $nickname, $name, $password, $email, $ip_address)
 	{
 		if($pdo_object && $nickname && $name && $password && $email && $ip_address)
 		{
@@ -126,7 +125,7 @@ class Database
 	*	@args $pdo_object
 	*	return query_status? true:false
 	*/
-	public function queryCreateUsers()
+	public function queryCreateUsers($pdo_object)
 	{
 		if($pdo_object->exec('CREATE TABLE IF NOT EXISTS users(
 			id_user INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -147,7 +146,7 @@ class Database
 	*	@args $pdo_object
 	*	return query_status? true:false
 	*/
-	public function queryCreateChats()
+	public function queryCreateChats($pdo_object)
 	{
 		if($pdo_object->exec('CREATE TABLE IF NOT EXISTS chats(
 			id_chat INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -166,7 +165,7 @@ class Database
 	*	@args $pdo_object
 	*	return query_status? true:false
 	*/
-	public function queryCreateGroups()
+	public function queryCreateGroups($pdo_object)
 	{
 		if($pdo_object->exec('CREATE TABLE IF NOT EXISTS groups(
 			id_group INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -185,7 +184,7 @@ class Database
 	*	@args $pdo_object
 	*	return query_status? true:false
 	*/
-	public function queryCreateRooms()
+	public function queryCreateRooms($pdo_object)
 	{
 		if($pdo_object->exec('CREATE TABLE IF NOT EXISTS rooms(
 			id_room INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -205,7 +204,7 @@ class Database
 	*	@args $pdo_object
 	*	return query_status? true:false
 	*/
-	public function queryCreateMessages()
+	public function queryCreateMessages($pdo_object)
 	{
 		if($pdo_object->exec('CREATE TABLE IF NOT EXISTS messages(
 			id_msg INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -226,7 +225,7 @@ class Database
 	*	@args $pdo_object
 	*	return query_status? true:false
 	*/
-	public function queryCreateSecuritySystems()
+	public function queryCreateSecuritySystems($pdo_object)
 	{
 		if($pdo_object->exec('CREATE TABLE IF NOT EXISTS security_systems(
 			id_skey INT PRIMARY KEY NOT NULL  AUTO_INCREMENT,
