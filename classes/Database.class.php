@@ -29,8 +29,11 @@ class Database
 	{
 		$pdo_object = $this->pdo_object;
 		$user_data_correct = $this->verifUserDataCorrect($nickname, $name, $password, $email, $ip_address);
+		echo $user_data_correct;
 		if($user_data_correct){
 			$this->queryInsertUser($pdo_object, $nickname, $name, $password, $email, $ip_address);
+		}else{
+			Tools::throwErrorMessage('user_data_incorrect');
 		}
 	}
 	/*
@@ -152,11 +155,23 @@ class Database
 	public function verifUserDataCorrect($nickname, $name, $password, $email, $ip_address)
 	{
 		//nickname must be string && must be longer than 100 char && must start with a letter 
-
+		$pattern = '#^[a-z]#';
+		if(!is_string($nickname) && strlen($nickname) > 100 && preg_match($pattern, $nickname) == 0){
+			Tools::throwWarningMessage('nickname is not good');
+			return false;
+		}
 		//name follow same rules as nickname 
-
-		//password must be max 100 char, min 8 char, have letters uppercase en lowercase, have at least one number and one special char
-
+		$pattern = '#^[a-z]#';
+		if(!is_string($name) && strlen($name) > 100 && preg_match($pattern, $name) == 0){
+			Tools::throwWarningMessage('name is not good');
+			return false;
+		}
+		//password must be max 100 char, min 8 char, have letters uppercase and lowercase, have at least one number and one special char, starting with a letter(up||low)
+		$p_first_letter = '#^[A-Z]?||^[a-z]?#';
+		if(strlen($password) > 100 && strlen($password) < 8 && preg_match($p_first_letter, $password)){
+			Tools::throwWarningMessage('password is not good');
+			return false;
+		}
 		//email must be a valid email address
 
 		//ip_address is automatically retreived from user machine
