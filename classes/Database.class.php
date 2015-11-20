@@ -8,7 +8,7 @@ class Database
 
 		$this->callCreateAllStructure();
 		// $this->querySelectAllDataTable($pdo_object, 'user');	
-		$this->callQueryInsertUser('SynToX','Sato','sat','s.hemmi@gmail.com','192.168.1.3');
+		$this->callQueryInsertUser('SynToX','Sato','0000000sat','s.hemmi@gmail.com','192.168.1.3');
 	}
 	/*
 	* pdo_dependant functions
@@ -75,7 +75,7 @@ class Database
 	*/
 	public function destroyAllStructure()
 	{
-
+ 
 	}
 	/*
 	* 	Select all data in specific table
@@ -156,19 +156,31 @@ class Database
 	{
 		//nickname must be string && must be longer than 100 char && must start with a letter 
 		$pattern = '#^[a-z]#';
-		if(!is_string($nickname) && strlen($nickname) > 100 && preg_match($pattern, $nickname) == 0){
+		$nickname_match = Tools::preg_m($pattern, $nickname);
+		echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
+		var_dump($nickname_match);
+		echo '</pre>';
+		if(!is_string($nickname) && strlen($nickname) > 100 && $nickname_match){
 			Tools::throwWarningMessage('nickname is not good');
 			return false;
 		}
 		//name follow same rules as nickname 
 		$pattern = '#^[a-z]#';
-		if(!is_string($name) && strlen($name) > 100 && preg_match($pattern, $name) == 0){
+		$name_match = Tools::preg_m($pattern, $name);
+		echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
+		var_dump($name_match);
+		echo '</pre>';
+		if(!is_string($name) && strlen($name) > 100 && $name_match){
 			Tools::throwWarningMessage('name is not good');
 			return false;
 		}
 		//password must be max 100 char, min 8 char, have letters uppercase and lowercase, have at least one number and one special char, starting with a letter(up||low)
 		$p_first_letter = '#^[A-Z]?||^[a-z]?#';
-		if(strlen($password) > 100 && strlen($password) < 8 && preg_match($p_first_letter, $password)){
+		$password_match1 = Tools::preg_m($p_first_letter, $password);
+		echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
+		var_dump($password_match1[0][0]);
+		echo '</pre>';
+		if(strlen($password) > 100 && strlen($password) < 8 && $password_match1){
 			Tools::throwWarningMessage('password is not good');
 			return false;
 		}
