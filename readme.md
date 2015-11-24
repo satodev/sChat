@@ -19,7 +19,7 @@ The interface that allow user/group to communicate with each other.
 ### Security_System
 A very basic security system.
 
-#ARCHITECTURE
+#THEORETICAL ARCHITECTURES
 	- Main{
 		class Register{}
 		class User{}
@@ -29,7 +29,26 @@ A very basic security system.
 		class Init{}
 		class Interface{}
 	}
+###FUNCTIONNAL ARCHITECTURES 
 
+	Authentification.class.php{
+		description : "first level class of authentification process"
+	}
+	Controller.class.php{
+		description : "call of functionnal class or functions, creating the root of the application"
+	}
+	Database.class.php{
+		description: "all database related queries"
+	}
+	sChat.class.php{
+		description: "first level of application, will call all simplified function of the project",
+		function-concerned : [
+			'controller', 'view', 'model', 'authentification', 'user management', 'group managnement', 'chatRooms'
+		]
+	}
+	Tools.class.php{
+		description : "Bunch of tools function called statically in needed situation"
+	}
 
 #TODOLIST/IMPROVEMENTS
 - [ ] User
@@ -107,4 +126,4 @@ password	|	|	|	|date_sent	|	|
 #Enhance Reame.md
 https://guides.github.com/features/mastering-markdown/
 
-http://www.emoji-cheat-sheet.com/
+<!-- http://www.emoji-cheat-sheet.com/ -->
