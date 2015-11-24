@@ -21,33 +21,65 @@ A very basic security system.
 
 #THEORETICAL ARCHITECTURES
 	- Main{
-		class Register{}
-		class User{}
-		class Group{}
-		class Message{}
-		class Session{}
-		class Init{}
-		class Interface{}
+		class Authentification {}
+		class BackPanel {}
+		class User {}
+		class Group {}
+		class Controller {}
+		class Database {}
+		class sChat {}
+		class Tools {}
 	}
 ###FUNCTIONNAL ARCHITECTURES 
 
 	Authentification.class.php{
-		description : "first level class of authentification process"
+		description : "first level class of authentification process",
+		function-related : [
+		],
+		class-parents : "",
+	}
+	BackPanel.class.php{
+		description : "back office, mainly created to retreive data",
+		function-related : [
+		],
+		class-parents : "",
+	}
+	User.class.php{
+		description: "first level class of user process",
+		function-related : [
+		],
+		class-parents : "",
+	}
+	Group.class.php{
+		description: "first level class of group management",
+		function-related : [
+		],
+		class-parents : "",
 	}
 	Controller.class.php{
-		description : "call of functionnal class or functions, creating the root of the application"
+		description : "call of functionnal class or functions, creating the root of the application",
+		function-related : [
+		],
+		class-parents : "",
 	}
 	Database.class.php{
-		description: "all database related queries"
+		description: "all database related queries",
+		function-related : [
+		],
+		class-parents : "",
 	}
 	sChat.class.php{
 		description: "first level of application, will call all simplified function of the project",
-		function-concerned : [
-			'controller', 'view', 'model', 'authentification', 'user management', 'group managnement', 'chatRooms'
-		]
+		function-related : [
+			'Controller', 'view', 'model', 'Authentification', 'user management', 'group managnement', 'chatRooms'
+		],
+		class-parents : ""
 	}
 	Tools.class.php{
-		description : "Bunch of tools function called statically in needed situation"
+		description : "Bunch of tools function called statically in needed situation",
+		function-related : [
+		],
+		class-parents : "",
 	}
 
 #TODOLIST/IMPROVEMENTS
