@@ -8,7 +8,9 @@ class Database
 
 		$this->callCreateAllStructure();
 		// $this->querySelectAllDataTable($pdo_object, 'user');	
-		$this->callQueryInsertUser('SynToX','Sato','0000000sat','s.hemmi@gmail.com','192.168.1.3');
+		$this->callQueryInsertUser('SynToX','Sato','satoruHemmi','s.hemmi@gmail.com','192.168.1.3');
+		//clean DB
+		$this->callCleanDb();
 	}
 	/*
 	* pdo_dependant functions
@@ -29,12 +31,18 @@ class Database
 	{
 		$pdo_object = $this->pdo_object;
 		$user_data_correct = $this->verifUserDataCorrect($nickname, $name, $password, $email, $ip_address);
-		echo $user_data_correct;
+		echo 'user data '.$user_data_correct;
 		if($user_data_correct){
 			$this->queryInsertUser($pdo_object, $nickname, $name, $password, $email, $ip_address);
 		}else{
 			Tools::throwErrorMessage('user_data_incorrect');
 		}
+	}
+	public function callCleanDb()
+	{
+		$pdo_object = $this->pdo_object;
+		$table_name = array('chats','groups', 'messages', 'rooms', 'security_systems', 'users');
+		$this->cleanDb($pdo_object, $table_name);
 	}
 	/*
 	*	connect to sgbd
@@ -70,12 +78,23 @@ class Database
 		return array($query_Create_Users_structure, $query_Create_Chat_structure, $query_Create_Group_structure, $query_Create_Rooms_structure, $query_Create_Message_structure, $query_Create_SecuritySystem_structure);
 	}
 	/*
-	*	Destoy all DB structures
+	*	Destoy the db
+	* 	in case DB is corrupted
 	*	@args pdo_object
 	*/
-	public function destroyAllStructure()
+	public function cleanDb($pdo_object, $table_name)
 	{
- 
+		//get all db
+		//foreach db 
+		//truncate it		
+		if($table_name){
+			if($pdo_object){
+				foreach($table_name as $db_name){
+					$sql = 'TRUNCATE '.$db_name;
+					$pdo_object->exec($sql);
+				}
+			}
+		}
 	}
 	/*
 	* 	Select all data in specific table
@@ -109,7 +128,7 @@ class Database
 	{
 		if($pdo_object && $nickname && $name && $password && $email && $ip_address){
 			$user_exists = $this->queryVerifUserExists($pdo_object, $nickname, $name, $password, $email, $ip_address);
-			if($user_exists == false && $user_data_correct){
+			if($user_exists == false){
 				$q = $pdo_object->prepare('INSERT INTO users (nickname, name, password, email, ip_address)
 					VALUES (
 						:nickname,
@@ -140,7 +159,7 @@ class Database
 			$q->bindParam(':email', $email, PDO::PARAM_STR);
 			$q->bindParam(':ip_address', $ip_address, PDO::PARAM_STR);
 			$q->execute();
-				$result = $q->fetch(PDO::FETCH_ASSOC);
+			$result = $q->fetch(PDO::FETCH_ASSOC);
 			if($result['email']&& $result['ip_address']){
 				return true;
 			}else{
@@ -154,40 +173,50 @@ class Database
 	*/
 	public function verifUserDataCorrect($nickname, $name, $password, $email, $ip_address)
 	{
-		//nickname must be string && must be longer than 100 char && must start with a letter 
-		$pattern = '#^[a-z]#';
-		$nickname_match = Tools::preg_m($pattern, $nickname);
-		echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
-		var_dump($nickname_match);
-		echo '</pre>';
-		if(!is_string($nickname) && strlen($nickname) > 100 && $nickname_match){
-			Tools::throwWarningMessage('nickname is not good');
-			return false;
-		}
-		//name follow same rules as nickname 
-		$pattern = '#^[a-z]#';
-		$name_match = Tools::preg_m($pattern, $name);
-		echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
-		var_dump($name_match);
-		echo '</pre>';
-		if(!is_string($name) && strlen($name) > 100 && $name_match){
-			Tools::throwWarningMessage('name is not good');
-			return false;
-		}
-		//password must be max 100 char, min 8 char, have letters uppercase and lowercase, have at least one number and one special char, starting with a letter(up||low)
-		$p_first_letter = '#^[A-Z]?||^[a-z]?#';
-		$password_match1 = Tools::preg_m($p_first_letter, $password);
-		echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
-		var_dump($password_match1[0][0]);
-		echo '</pre>';
-		if(strlen($password) > 100 && strlen($password) < 8 && $password_match1){
-			Tools::throwWarningMessage('password is not good');
+		if($this->verifNickname($nickname) && $this->verifName($name) && $this->verifPassword($password))
+		{
+			return true;	
+		}else{
 			return false;
 		}
 		//email must be a valid email address
 
 		//ip_address is automatically retreived from user machine
-		return true;
+		
+	}
+	public function verifNickname($nickname)
+	{
+		echo 'passNickname';
+		//nickname must be string && must be longer than 100 char && must start with a letter 
+		$pattern = '#^[a-zA-Z]+#';
+		$nickname_match = Tools::preg_m($pattern, $nickname);
+		if(!is_string($nickname) && strlen($nickname) > 100 && $nickname_match == null || $nickname_match == ""){
+			echo '<br />notpassNickname<br />';
+			Tools::throwWarningMessage('nickname is not good');
+			return false;
+		}
+	}
+	public function verifName($name)
+	{
+		echo 'pass Name';
+		//name follow same rules as nickname 
+		$pattern = '#^[A-Z]?||^[a-z]?#';
+		$name_match = Tools::preg_m($pattern, $name);
+		if(!is_string($name) && strlen($name) > 100 && $name_match[0][0] == null || $name_match[0][0] == ""){
+			Tools::throwWarningMessage('name is not good');
+			return false;
+		}
+	}
+	public function verifPassword($password)
+	{
+		echo 'pass Password';
+		//password must be max 100 char, min 8 char, have letters uppercase and lowercase, have at least one number and one special char, starting with a letter(up||low)
+		$p_first_letter = '#(?=^[a-zA-Z]+)(?=(^.*[a-zA-Z0-9]*.*$))(?=^.{8,100})#';
+		$password_match1 = Tools::preg_m($p_first_letter, $password);
+		if(strlen($password) > 100 && strlen($password) < 8 && $password_match1 == "" || $password_match1 == null){
+			Tools::throwWarningMessage('password is not good - start with a letter, 8 to 100 long');
+			return false;
+		}
 	}
 	/*
 	*	Create Table Users
