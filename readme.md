@@ -30,54 +30,54 @@ A very basic security system.
 		class sChat {}
 		class Tools {}
 	}
-###FUNCTIONNAL ARCHITECTURES 
 
+###FUNCTIONNAL ARCHITECTURES 
 	Authentification.class.php{
 		description : "first level class of authentification process",
-		function-related : [
+		functions : [
 		],
 		class-parents : "",
 	}
 	BackPanel.class.php{
 		description : "back office, mainly created to retreive data",
-		function-related : [
+		functions : [
 		],
 		class-parents : "",
 	}
 	User.class.php{
 		description: "first level class of user process",
-		function-related : [
+		functions : [
 		],
 		class-parents : "",
 	}
 	Group.class.php{
 		description: "first level class of group management",
-		function-related : [
+		functions : [
 		],
 		class-parents : "",
 	}
 	Controller.class.php{
 		description : "call of functionnal class or functions, creating the root of the application",
-		function-related : [
+		functions : [
 		],
 		class-parents : "",
 	}
 	Database.class.php{
 		description: "all database related queries",
-		function-related : [
+		functions : [
 		],
 		class-parents : "",
 	}
 	sChat.class.php{
 		description: "first level of application, will call all simplified function of the project",
-		function-related : [
+		functions : [
 			'Controller', 'view', 'model', 'Authentification', 'user management', 'group managnement', 'chatRooms'
 		],
 		class-parents : ""
 	}
 	Tools.class.php{
 		description : "Bunch of tools function called statically in needed situation",
-		function-related : [
+		functions : [
 		],
 		class-parents : "",
 	}
