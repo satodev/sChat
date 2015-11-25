@@ -186,15 +186,15 @@ class Database
 	}
 	public function verifNickname($nickname)
 	{
-		echo 'passNickname';
 		//nickname must be string && must be longer than 100 char && must start with a letter 
 		$pattern = '#^[a-zA-Z]+#';
 		$nickname_match = Tools::preg_m($pattern, $nickname);
-		if(!is_string($nickname) && strlen($nickname) > 100 && $nickname_match == null || $nickname_match == ""){
+		if(strlen($nickname) > 100 && $nickname_match == null || $nickname_match == ""){
 			echo '<br />notpassNickname<br />';
 			Tools::throwWarningMessage('nickname is not good');
 			return false;
 		}
+		return true;
 	}
 	public function verifName($name)
 	{
@@ -206,6 +206,7 @@ class Database
 			Tools::throwWarningMessage('name is not good');
 			return false;
 		}
+		return true;
 	}
 	public function verifPassword($password)
 	{
@@ -217,6 +218,11 @@ class Database
 			Tools::throwWarningMessage('password is not good - start with a letter, 8 to 100 long');
 			return false;
 		}
+		return true;
+	}
+	public function verifEmailAddress($email)
+	{
+		
 	}
 	/*
 	*	Create Table Users
