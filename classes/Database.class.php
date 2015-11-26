@@ -173,7 +173,7 @@ class Database
 	*/
 	public function verifUserDataCorrect($nickname, $name, $password, $email, $ip_address)
 	{
-		if($this->verifNickname($nickname) && $this->verifName($name) && $this->verifPassword($password))
+		if($this->verifNickname($nickname) && $this->verifName($name) && $this->verifPassword($password) && $this->verifEmailAddress($email))
 		{
 			return true;	
 		}else{
@@ -222,7 +222,12 @@ class Database
 	}
 	public function verifEmailAddress($email)
 	{
-		
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    		// invalid emailaddress
+    		Tools::throwWarningMessage('email is not valid');
+    		return false;
+		}
+		return true;
 	}
 	/*
 	*	Create Table Users
