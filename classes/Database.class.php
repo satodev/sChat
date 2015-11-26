@@ -7,10 +7,20 @@ class Database
 	{
 		$this->pdo_object = $this->connect();
 		$this->table_name = array('chats','groups', 'messages', 'rooms', 'security_systems', 'users');
-
+		//testing function (they will be called in sChat class after that)
 		$this->callCreateAllStructure();
 		// $this->querySelectAllDataTable($pdo_object, 'user');	
-		$this->callQueryInsertUser('sat2','MyPseudo941','datFuckingPassword987956456431','Internationnal.entity@mail.com','::1');
+		$this->callQueryInsertUser('Sat','satoru','warleague@4591','hemmi.satoru@gmail.con','::1');
+		$this->callQueryInsertUser('Sato1','sato1','meinpassword123','satoru.hemmi@gmail.con','::1');
+		$this->callQueryInsertUser('Sato2','satoru','warleague@4591','s.hemmi@gmail.con','::1');
+		$this->callQueryInsertUser('Sato3','satoru','warleague@4591','sa.hemmi@gmail.con','::1');
+		$this->callQueryInsertUser('Sato4','satoru','warleague@4591','sato.hemmi@gmail.con','::1');
+		$this->callQueryInsertUser('Sato5','satoru','warleague@4591','sator.hemmi@gmail.con','::1');
+		$this->callQueryInsertUser('Sato6','satoru','warleague@4591','satoru.h@gmail.con','::1');
+		$this->callQueryInsertUser('Sato7','satoru','warleague@4591','satoru.he@gmail.con','::1');
+		$this->callQueryInsertUser('Sato8','satoru','warleague@4591','satoru.hem@gmail.con','::1');
+		$this->callQueryInsertUser('Sato9','satoru','warleague@4591','satoru.hemm@gmail.con','::1');
+
 
 		//clean DB
 		// $this->callCleanDb();
@@ -127,7 +137,7 @@ class Database
 	*	@args pdo_object && table name
 	*	echo table with data selected
 	*/
-	public function querySelectAllDataTable($pdo_object,$table)
+	public function querySelectAllDataTable($pdo_object, $table)
 	{
 		if($pdo_object){
 			$sql = 'SELECT * FROM '.$table;
@@ -210,6 +220,10 @@ class Database
 			return false;
 		}
 	}
+	/*
+	* verif function verifNickname
+	* return ? true: false 
+	*/
 	public function verifNickname($nickname)
 	{
 		//nickname must be string && must be longer than 100 char && must start with a letter 
@@ -222,10 +236,14 @@ class Database
 		}
 		return true;
 	}
+	/*
+	* verif function verifName
+	* return ? true: false 
+	*/
 	public function verifName($name)
 	{
 		//name follow same rules as nickname 
-		$pattern = '#^[A-Z]?||^[a-z]?#';
+		$pattern = '#^[a-zA-Z]+#';
 		$name_match = Tools::preg_m($pattern, $name);
 		if(!is_string($name) && strlen($name) > 100 && $name_match[0][0] == null || $name_match[0][0] == ""){
 			Tools::throwWarningMessage('name is not good');
@@ -233,6 +251,10 @@ class Database
 		}
 		return true;
 	}
+	/*
+	* verif function verifPassword
+	* return ? true: false 
+	*/
 	public function verifPassword($password)
 	{
 		//password must be max 100 char, min 8 char, have letters uppercase and lowercase, have at least one number and one special char, starting with a letter(up||low)
@@ -272,31 +294,42 @@ class Database
 			return false;
 		}
 	}
+	/*
+	*	createGroup to init id and synchronize it with the user table ones
+	*/
 	public function createGroup($pdo_object)
 	{
-		//when a user exists
-		//select id
-		//create a groupe with that id
 		$user_indexes = $this->querySelectUserId($pdo_object);
 		foreach($user_indexes as $id_user){
 			$sql = 'SELECT id_user from groups WHERE id_user ='.$id_user;
 			$q = $pdo_object->prepare($sql);
 			$q->execute();
 			$result = $q->fetchAll(PDO::FETCH_ASSOC);
-			echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
-			var_dump($result);
-			echo '</pre>';
-			if(!$result){
+		}
+		if(!$result){
 			$sql = 'INSERT INTO groups (id_user) VALUES (:id_user)';
 			$q = $pdo_object->prepare($sql);
 			$q->bindParam(':id_user', $id_user,PDO::PARAM_STR);	
 			$q->execute();
-		}else{
+		}else{	
 			Tools::throwWarningMessage('id_user already exists');
 		}
-		}
-		
 	}
+	/**
+	* @return true:false
+	* 
+	*/
+	public function queryAddGroupFriendList($pdo_object, $id_user)
+	{
+		if($id_user)
+		{
+			
+		}
+	}
+	/*
+	* arg pdo_object
+	* return array id_user
+	*/
 	public function querySelectUserId($pdo_object)
 	{
 		if($pdo_object){
