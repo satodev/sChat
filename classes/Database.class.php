@@ -2,15 +2,21 @@
 class Database
 {
 	private $pdo_object;
+	private $table_name;
 	public function __construct()
 	{
 		$this->pdo_object = $this->connect();
+		$this->table_name = array('chats','groups', 'messages', 'rooms', 'security_systems', 'users');
 
 		$this->callCreateAllStructure();
 		// $this->querySelectAllDataTable($pdo_object, 'user');	
-		$this->callQueryInsertUser('SynToX','Sato','satoruHemmi','s.hemmi@gmail.com','::1');
+		$this->callQueryInsertUser('sat2','MyPseudo941','datFuckingPassword987956456431','Internationnal.entity@mail.com','::1');
+
 		//clean DB
 		// $this->callCleanDb();
+
+		//destoy DB Structures
+		// $this->callDestoyDbStructures();
 	}
 	/*
 	* pdo_dependant functions
@@ -31,9 +37,9 @@ class Database
 	{
 		$pdo_object = $this->pdo_object;
 		$user_data_correct = $this->verifUserDataCorrect($nickname, $name, $password, $email, $ip_address);
-		echo 'user data '.$user_data_correct;
 		if($user_data_correct){
 			$this->queryInsertUser($pdo_object, $nickname, $name, $password, $email, $ip_address);
+			$this->createGroup($pdo_object);
 		}else{
 			Tools::throwErrorMessage('user_data_incorrect');
 		}
@@ -44,8 +50,17 @@ class Database
 	public function callCleanDb()
 	{
 		$pdo_object = $this->pdo_object;
-		$table_name = array('chats','groups', 'messages', 'rooms', 'security_systems', 'users');
+		$table_name = $this->table_name;
 		$this->cleanDb($pdo_object, $table_name);
+	}
+	/*
+	* call to destoy all structure, for dev purposes
+	*/
+	public function callDestoyDbStructures()
+	{
+		$pdo_object = $this->pdo_object;
+		$table_name = $this->table_name;
+		$this->destoyDbStructures($pdo_object, $table_name);
 	}
 	/*
 	*	connect to sgbd
@@ -87,12 +102,23 @@ class Database
 	*/
 	public function cleanDb($pdo_object, $table_name)
 	{	
-		if($table_name){
-			if($pdo_object){
-				foreach($table_name as $db_name){
-					$sql = 'TRUNCATE '.$db_name;
-					$pdo_object->exec($sql);
-				}
+		if($table_name && $pdo_object){
+			foreach($table_name as $db_name){
+				$sql = 'TRUNCATE '.$db_name;
+				$pdo_object->exec($sql);
+			}
+		}
+	}
+	/*
+	*  Dev purpose
+	*  Destoy all DB structures 
+	*/
+	public function destoyDbStructures($pdo_object, $table_name)
+	{
+		if($pdo_object && $table_name){
+			foreach($table_name as $db_name){
+				$sql  = 'DROP TABLE '. $db_name;
+				$pdo_object->exec($sql);
 			}
 		}
 	}
@@ -233,19 +259,60 @@ class Database
 		return true;
 	}
 	/*
-	* Basic ip_control
+	* Basic ip verification
 	*/
 	public function verifIPAddress($ip_address)
 	{
 		$control = Tools::getUserIP();
 		
 		if($ip_address == $control){
-			echo $ip_address;
 			return true;
 		}else{
-			echo $control;
 			Tools::throwWarningMessage('Something wrong with your ip_address');
 			return false;
+		}
+	}
+	public function createGroup($pdo_object)
+	{
+		//when a user exists
+		//select id
+		//create a groupe with that id
+		$user_indexes = $this->querySelectUserId($pdo_object);
+		foreach($user_indexes as $id_user){
+			$sql = 'SELECT id_user from groups WHERE id_user ='.$id_user;
+			$q = $pdo_object->prepare($sql);
+			$q->execute();
+			$result = $q->fetchAll(PDO::FETCH_ASSOC);
+			echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
+			var_dump($result);
+			echo '</pre>';
+			if(!$result){
+			$sql = 'INSERT INTO groups (id_user) VALUES (:id_user)';
+			$q = $pdo_object->prepare($sql);
+			$q->bindParam(':id_user', $id_user,PDO::PARAM_STR);	
+			$q->execute();
+		}else{
+			Tools::throwWarningMessage('id_user already exists');
+		}
+		}
+		
+	}
+	public function querySelectUserId($pdo_object)
+	{
+		if($pdo_object){
+			$sql = "SELECT * FROM users WHERE 1 LIMIT 0,30";
+			$q = $pdo_object->prepare($sql);
+			$q->execute();
+			$result = $q->fetchAll(PDO::FETCH_ASSOC);
+			foreach($result as $user_row){
+				foreach($user_row as $key => $row){
+					if($key == 'id_user'){
+							// echo $key.' = '.$row.'<br />';
+						$return_array[] = $row;
+					}
+				}
+			}
+			return $return_array;
 		}
 	}
 	/*
@@ -297,6 +364,7 @@ class Database
 	{
 		if($pdo_object->exec('CREATE TABLE IF NOT EXISTS groups(
 			id_group INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+			id_user INT NOT NULL,
 			friend_list VARCHAR(255),
 			nearby_user VARCHAR(255),
 			seen_user VARCHAR(255)
