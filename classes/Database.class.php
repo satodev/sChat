@@ -8,9 +8,9 @@ class Database
 
 		$this->callCreateAllStructure();
 		// $this->querySelectAllDataTable($pdo_object, 'user');	
-		$this->callQueryInsertUser('SynToX','Sato','satoruHemmi','s.hemmi@gmail.com','192.168.1.3');
+		$this->callQueryInsertUser('SynToX','Sato','satoruHemmi','s.hemmi@gmail.com','::1');
 		//clean DB
-		$this->callCleanDb();
+		// $this->callCleanDb();
 	}
 	/*
 	* pdo_dependant functions
@@ -38,6 +38,9 @@ class Database
 			Tools::throwErrorMessage('user_data_incorrect');
 		}
 	}
+	/*
+	* create custom array with db name (nothing dynamic)
+	*/
 	public function callCleanDb()
 	{
 		$pdo_object = $this->pdo_object;
@@ -83,10 +86,7 @@ class Database
 	*	@args pdo_object
 	*/
 	public function cleanDb($pdo_object, $table_name)
-	{
-		//get all db
-		//foreach db 
-		//truncate it		
+	{	
 		if($table_name){
 			if($pdo_object){
 				foreach($table_name as $db_name){
@@ -173,16 +173,16 @@ class Database
 	*/
 	public function verifUserDataCorrect($nickname, $name, $password, $email, $ip_address)
 	{
-		if($this->verifNickname($nickname) && $this->verifName($name) && $this->verifPassword($password) && $this->verifEmailAddress($email))
+		if($this->verifNickname($nickname) 
+			&& $this->verifName($name) 
+			&& $this->verifPassword($password) 
+			&& $this->verifEmailAddress($email) 
+			&& $this->verifIPAddress($ip_address))
 		{
 			return true;	
 		}else{
 			return false;
 		}
-		//email must be a valid email address
-
-		//ip_address is automatically retreived from user machine
-		
 	}
 	public function verifNickname($nickname)
 	{
@@ -198,7 +198,6 @@ class Database
 	}
 	public function verifName($name)
 	{
-		echo 'pass Name';
 		//name follow same rules as nickname 
 		$pattern = '#^[A-Z]?||^[a-z]?#';
 		$name_match = Tools::preg_m($pattern, $name);
@@ -210,7 +209,6 @@ class Database
 	}
 	public function verifPassword($password)
 	{
-		echo 'pass Password';
 		//password must be max 100 char, min 8 char, have letters uppercase and lowercase, have at least one number and one special char, starting with a letter(up||low)
 		$p_first_letter = '#(?=^[a-zA-Z]+)(?=(^.*[a-zA-Z0-9]*.*$))(?=^.{8,100})#';
 		$password_match1 = Tools::preg_m($p_first_letter, $password);
@@ -220,14 +218,35 @@ class Database
 		}
 		return true;
 	}
+	/*
+	* @args email
+	* @return true|false
+	** Basic email control
+	*/
 	public function verifEmailAddress($email)
 	{
 		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     		// invalid emailaddress
-    		Tools::throwWarningMessage('email is not valid');
-    		return false;
+			Tools::throwWarningMessage('email is not valid');
+			return false;
 		}
 		return true;
+	}
+	/*
+	* Basic ip_control
+	*/
+	public function verifIPAddress($ip_address)
+	{
+		$control = Tools::getUserIP();
+		
+		if($ip_address == $control){
+			echo $ip_address;
+			return true;
+		}else{
+			echo $control;
+			Tools::throwWarningMessage('Something wrong with your ip_address');
+			return false;
+		}
 	}
 	/*
 	*	Create Table Users
