@@ -1,5 +1,6 @@
 <?php
 class Tools{
+	private static $test_login;
 	public static function preg_m($pattern, $subject) 
 	{
 		preg_match($pattern, $subject, $match, PREG_OFFSET_CAPTURE);
@@ -33,5 +34,13 @@ class Tools{
 		}
 
 		return $ip;
+	}
+	public static function callSetTestLogin($arg)
+	{
+		self::$test_login = $arg;
+	}
+	public static function showTestLogin()
+	{
+		echo self::$test_login;
 	}
 }

@@ -6,6 +6,9 @@ class Database
 	private $current_id_user_connected;
 	public function __construct()
 	{
+		$data = Tools::callSetTestLogin('1st placement');
+		$data2 = Tools::callSetTestLogin('2nd placement');
+		
 		$this->pdo_object = $this->connect();
 		$this->table_name = array('chats','groups', 'messages', 'rooms', 'security_systems', 'users');
 		//testing function (they will be called in sChat class after that)
