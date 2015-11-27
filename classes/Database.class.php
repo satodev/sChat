@@ -3,25 +3,27 @@ class Database
 {
 	private $pdo_object;
 	private $table_name;
+	private $current_id_user_connected;
 	public function __construct()
 	{
 		$this->pdo_object = $this->connect();
 		$this->table_name = array('chats','groups', 'messages', 'rooms', 'security_systems', 'users');
 		//testing function (they will be called in sChat class after that)
-		$this->callCreateAllStructure();
+		// $this->callCreateAllStructure();
 		// $this->querySelectAllDataTable($pdo_object, 'user');	
-		$this->callQueryInsertUser('Sat','satoru','warleague@4591','hemmi.satoru@gmail.con','::1');
-		$this->callQueryInsertUser('Sato1','sato1','meinpassword123','satoru.hemmi@gmail.con','::1');
-		$this->callQueryInsertUser('Sato2','satoru','warleague@4591','s.hemmi@gmail.con','::1');
-		$this->callQueryInsertUser('Sato3','satoru','warleague@4591','sa.hemmi@gmail.con','::1');
-		$this->callQueryInsertUser('Sato4','satoru','warleague@4591','sato.hemmi@gmail.con','::1');
-		$this->callQueryInsertUser('Sato5','satoru','warleague@4591','sator.hemmi@gmail.con','::1');
-		$this->callQueryInsertUser('Sato6','satoru','warleague@4591','satoru.h@gmail.con','::1');
-		$this->callQueryInsertUser('Sato7','satoru','warleague@4591','satoru.he@gmail.con','::1');
-		$this->callQueryInsertUser('Sato8','satoru','warleague@4591','satoru.hem@gmail.con','::1');
-		$this->callQueryInsertUser('Sato9','satoru','warleague@4591','satoru.hemm@gmail.con','::1');
+		// $this->callQueryInsertUser('Sat','satoru','warleague@4591','hemmi.satoru@gmail.con','::1');
+		// $this->callQueryInsertUser('Sato1','sato1','meinpassword123','satoru.hemmi@gmail.con','::1');
+		// $this->callQueryInsertUser('Sato2','satoru','warleague@4591','s.hemmi@gmail.con','::1');
+		// $this->callQueryInsertUser('Sato3','satoru','warleague@4591','sa.hemmi@gmail.con','::1');
+		// $this->callQueryInsertUser('Sato4','satoru','warleague@4591','sato.hemmi@gmail.con','::1');
+		// $this->callQueryInsertUser('Sato5','satoru','warleague@4591','sator.hemmi@gmail.con','::1');
+		// $this->callQueryInsertUser('Sato6','satoru','warleague@4591','satoru.h@gmail.con','::1');
+		// $this->callQueryInsertUser('Sato7','satoru','warleague@4591','satoru.he@gmail.con','::1');
+		// $this->callQueryInsertUser('Sato8','satoru','warleague@4591','satoru.hem@gmail.con','::1');
+		// $this->callQueryInsertUser('Sato9','satoru','warleague@4591','satoru.hemm@gmail.con','::1');
 
-
+		$this->queryLoginProcess($this->pdo_object, 'hemmi.satoru@gmail.con', 'warleague@4591');
+		$this->queryAddGroupFriendList($this->pdo_object, $this->current_id_user_connected, 1);
 		//clean DB
 		// $this->callCleanDb();
 
@@ -52,6 +54,41 @@ class Database
 			$this->createGroup($pdo_object);
 		}else{
 			Tools::throwErrorMessage('user_data_incorrect');
+		}
+	}
+	/**
+	* login process
+	* @args login mdp 
+	* @return connected?true:false
+	*/
+	public function queryLoginProcess($pdo_object, $login, $mdp)
+	{
+		//detect if it's a email form or a nickname form
+		//then check the credentials into DB
+		if($pdo_object){
+			$mail_type = $this->verifEmailAddress($login);
+			if(!$mail_type){
+				//it's the nickname
+				$sql = "SELECT id_user FROM `users` WHERE nickname = \"$login\" AND password = \"$mdp\"";
+				$q = $pdo_object->prepare($sql);
+				$q->execute();
+				$result = $q->fetchAll(PDO::FETCH_ASSOC);
+				if($result){
+					echo 'nickname login : id is : '.$result[0]['id_user'];
+					$this->current_id_user_connected = $result[0]['id_user'];
+				}
+			}
+			if($mail_type){
+				//it's the email
+				$sql = "SELECT id_user FROM `users` WHERE email = \"$login\" AND password = \"$mdp\"";
+				$q = $pdo_object->prepare($sql);
+				$q->execute();
+				$result = $q->fetchAll(PDO::FETCH_ASSOC);
+				if($result){
+					echo 'email login : id is : ' .$result[0]['id_user'];
+					$this->current_id_user_connected = $result[0]['id_user'];
+				}	
+			}
 		}
 	}
 	/*
@@ -182,6 +219,20 @@ class Database
 			}else if($user_exists){
 				Tools::throwWarningMessage('user exists');
 			}
+		}
+	}
+	/**
+	* @return id_user ? true: false
+	*/
+	public function queryVerifUserExistsById($pdo_object, $id_user)
+	{
+		if($pdo_object && $id_user)
+		{
+			$sql = "SELECT * FROM users WHERE id_user = ".$id_user;
+			$q = $pdo_object->prepare($sql);
+			$q->execute();
+			$results = $q->fetchAll(PDO::FETCH_ASSOC);
+			return $results;
 		}
 	}
 	/*
@@ -319,11 +370,21 @@ class Database
 	* @return true:false
 	* 
 	*/
-	public function queryAddGroupFriendList($pdo_object, $id_user)
+	public function queryAddGroupFriendList($pdo_object, $user_host, $id_user)
 	{
-		if($id_user)
+		// resume : add a friend in the friend list 
+		// if this friend already exists do nothing
+		// otherwise verif that id_user correspond to a real user
+		// and then add it to the corresponding column
+		$result = $this->queryVerifUserExistsById($pdo_object, $id_user);
+		if($pdo_object && $result)
 		{
-			
+			$sql = 'UPDATE groups SET friend_list = concat(friend_list, 2) WHERE id_group = 1';
+			$q = $pdo_object->prepare($sql);
+			$q->execute();
+			return true;
+		}else{
+			Tools::throwErrorMessage('queryAddGroupFriendList : id_User doesn\'t exists');
 		}
 	}
 	/*

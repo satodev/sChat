@@ -88,6 +88,9 @@ A very basic security system.
 - [ ] Message
 - [ ] Session
 
+- [ ] Md5 password, 
+- [ ] Authentification process, 
+- [ ] Define id_user_currently_connected
 
 #RANDOM ALGO && SELFASKS
 User doesn't exists -> register -> user exists
