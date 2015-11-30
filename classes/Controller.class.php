@@ -58,8 +58,8 @@ class Controller
 		}
 		$this->initPageController($current_page);
 	}
-	/*
-	*	return http://serverHost/
+	/**
+	*	@return http://serverHost/
 	*/
 	public function getDomainName(){
 		return $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].'/';

@@ -1,1 +1,1 @@
-<h1 style="text-align:center;">Welcome Home niggas</h1>
+<h1 style="text-align:center;">sChat - communication service</h1>
