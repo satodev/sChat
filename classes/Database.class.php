@@ -3,35 +3,52 @@ class Database
 {
 	private $pdo_object;
 	private $table_name;
-	private $current_id_user_connected;
+	private $current_id_user_connected = Array();
 	public function __construct()
 	{
-		$data = Tools::callSetTestLogin('1st placement');
-		$data2 = Tools::callSetTestLogin('2nd placement');
-		
 		$this->pdo_object = $this->connect();
-		$this->table_name = array('chats','groups', 'messages', 'rooms', 'security_systems', 'users');
+		$this->table_name = array('chats','groups', 'messages', 'rooms', 'security_systems', 'users', 'friend_list');
 		//testing function (they will be called in sChat class after that)
-		// $this->callCreateAllStructure();
-		// $this->querySelectAllDataTable($pdo_object, 'user');	
-		// $this->callQueryInsertUser('Sat','satoru','warleague@4591','hemmi.satoru@gmail.con','::1');
-		// $this->callQueryInsertUser('Sato1','sato1','meinpassword123','satoru.hemmi@gmail.con','::1');
-		// $this->callQueryInsertUser('Sato2','satoru','warleague@4591','s.hemmi@gmail.con','::1');
-		// $this->callQueryInsertUser('Sato3','satoru','warleague@4591','sa.hemmi@gmail.con','::1');
-		// $this->callQueryInsertUser('Sato4','satoru','warleague@4591','sato.hemmi@gmail.con','::1');
-		// $this->callQueryInsertUser('Sato5','satoru','warleague@4591','sator.hemmi@gmail.con','::1');
-		// $this->callQueryInsertUser('Sato6','satoru','warleague@4591','satoru.h@gmail.con','::1');
-		// $this->callQueryInsertUser('Sato7','satoru','warleague@4591','satoru.he@gmail.con','::1');
-		// $this->callQueryInsertUser('Sato8','satoru','warleague@4591','satoru.hem@gmail.con','::1');
-		// $this->callQueryInsertUser('Sato9','satoru','warleague@4591','satoru.hemm@gmail.con','::1');
+		$this->callCreateAllStructure();
+		$this->querySelectAllDataTable($this->pdo_object, 'users');	
+		$this->callQueryInsertUser('Sat','satoru','warleague@4591','hemmi.satoru@gmail.con','::1');
+		$this->callQueryInsertUser('Sato1','sato1','meinpassword123','satoru.hemmi@gmail.con','::1');
+		$this->callQueryInsertUser('Sato2','satoru','warleague@4591','s.hemmi@gmail.con','::1');
+		$this->callQueryInsertUser('Sato3','satoru','warleague@4591','sa.hemmi@gmail.con','::1');
+		$this->callQueryInsertUser('Sato4','satoru','warleague@4591','sato.hemmi@gmail.con','::1');
+		$this->callQueryInsertUser('Sato5','satoru','warleague@4591','sator.hemmi@gmail.con','::1');
+		$this->callQueryInsertUser('Sato6','satoru','warleague@4591','satoru.h@gmail.con','::1');
+		$this->callQueryInsertUser('Sato7','satoru','warleague@4591','satoru.he@gmail.con','::1');
+		$this->callQueryInsertUser('Sato8','satoru','warleague@4591','satoru.hem@gmail.con','::1');
+		$this->callQueryInsertUser('Sato9','satoru','warleague@4591','satoru.hemm@gmail.con','::1');
 
-		$this->queryLoginProcess($this->pdo_object, 'hemmi.satoru@gmail.con', 'warleague@4591');
+		$this->callLoginProcess('hemmi.satoru@gmail.con', 'warleague@4591');
+		$this->callLoginProcess('satoru.hemmi@gmail.con', 'meinpassword123');
 		$this->queryAddGroupFriendList($this->pdo_object, $this->current_id_user_connected, 1);
+		$this->callAddFriend(1, 2);
+		// $this->callQueryLogoutProcess(3);
+
 		//clean DB
 		// $this->callCleanDb();
 
 		//destoy DB Structures
 		// $this->callDestoyDbStructures();
+	}
+	/** 
+	*	connect to sgbd
+	*	return pdo_object
+	*/
+	public function connect()
+	{
+		$dsn = 'mysql:host=localhost:3307;dbname=schat';
+		$user = 'root';
+		$passwd = 'usbw';
+		try{
+			$pdo = new PDO($dsn,$user,$passwd);
+		}catch(Exception $e){
+			echo $e->getMessage();
+		}
+		return $pdo;
 	}
 	/*
 	* pdo_dependant functions
@@ -60,41 +77,29 @@ class Database
 		}
 	}
 	/**
-	* login process
-	* @args login mdp 
-	* @return connected?true:false
+	* call to login process 
+	* verif if the query has correctly been done
+	* also verif if the id_user has been implemented into the authentification array
 	*/
-	public function queryLoginProcess($pdo_object, $login, $mdp)
+	public function callLoginProcess($login, $mdp)
 	{
-		//detect if it's a email form or a nickname form
-		//then check the credentials into DB
-		if($pdo_object){
-			$mail_type = $this->verifEmailAddress($login);
-			if(!$mail_type){
-				//it's the nickname
-				$sql = "SELECT id_user FROM `users` WHERE nickname = \"$login\" AND password = \"$mdp\"";
-				$q = $pdo_object->prepare($sql);
-				$q->execute();
-				$result = $q->fetchAll(PDO::FETCH_ASSOC);
-				if($result){
-					echo 'nickname login : id is : '.$result[0]['id_user'];
-					$this->current_id_user_connected = $result[0]['id_user'];
-				}
-			}
-			if($mail_type){
-				//it's the email
-				$sql = "SELECT id_user FROM `users` WHERE email = \"$login\" AND password = \"$mdp\"";
-				$q = $pdo_object->prepare($sql);
-				$q->execute();
-				$result = $q->fetchAll(PDO::FETCH_ASSOC);
-				if($result){
-					echo 'email login : id is : ' .$result[0]['id_user'];
-					$this->current_id_user_connected = $result[0]['id_user'];
-				}	
-			}
+		$pdo_object = $this->pdo_object;
+		$verif_current_id_user =  $this->queryLoginProcess($pdo_object, $login, $mdp);
+		if($pdo_object && $login && $mdp && $verif_current_id_user && $this->current_id_user_connected[$verif_current_id_user]){
+			return true;
+		}else{
+			return false;
 		}
 	}
-	/*
+	/**
+	*	@args id_user
+	*/
+	public function callQueryLogoutProcess($id_user)
+	{
+		$pdo_object = $this->pdo_object;
+		$this->queryLogoutProcess($pdo_object, $id_user);
+	}
+	/**
 	* create custom array with db name (nothing dynamic)
 	*/
 	public function callCleanDb()
@@ -112,21 +117,62 @@ class Database
 		$table_name = $this->table_name;
 		$this->destoyDbStructures($pdo_object, $table_name);
 	}
-	/*
-	*	connect to sgbd
-	*	return pdo_object
+	/**
+	*
 	*/
-	public function connect()
+	public function callAddFriend($logged_user, $user_friend)
 	{
-		$dsn = 'mysql:host=localhost:3307;dbname=schat';
-		$user = 'root';
-		$passwd = 'usbw';
-		try{
-			$pdo = new PDO($dsn,$user,$passwd);
-		}catch(Exception $e){
-			echo $e->getMessage();
+		$pdo_object = $this->pdo_object;
+		$this->queryAddFriend($pdo_object, $logged_user, $user_friend);
+	}
+	/**
+	* login process
+	* @args login mdp 
+	* @return connected?true:false
+	*/
+	public function queryLoginProcess($pdo_object, $login, $mdp)
+	{
+		//detect if it's a email form or a nickname form
+		//then check the credentials into DB
+		if($pdo_object){
+			$mail_type = $this->verifEmailAddress($login);
+			if(!$mail_type){
+				//it's the nickname
+				$sql = "SELECT id_user FROM `users` WHERE nickname = \"$login\" AND password = \"$mdp\"";
+				$q = $pdo_object->prepare($sql);
+				$q->execute();
+				$result = $q->fetchAll(PDO::FETCH_ASSOC);
+				if($result){
+					// echo 'nickname login : id is : '.$result[0]['id_user'];
+					$this->current_id_user_connected[$result[0]['id_user']] = $result[0]['id_user'];
+					return $result[0]['id_user'];
+				}
+			}
+			if($mail_type){
+				//it's the email
+				$sql = "SELECT id_user FROM `users` WHERE email = \"$login\" AND password = \"$mdp\"";
+				$q = $pdo_object->prepare($sql);
+				$q->execute();
+				$result = $q->fetchAll(PDO::FETCH_ASSOC);
+				if($result){
+					// echo 'email login : id is : ' .$result[0]['id_user'];
+					$this->current_id_user_connected[$result[0]['id_user']] = $result[0]['id_user'];
+					return $result[0]['id_user'];
+				}	
+			}
 		}
-		return $pdo;
+	}
+	/**
+	* @args pdo_object
+	* @args id_user to disconnect
+	* @return ? true : false
+	*/
+	public function queryLogoutProcess($pdo_object, $id_user){
+		if($id_user && $pdo_object && $this->current_id_user_connected[$id_user]){
+			unset($this->current_id_user_connected[$id_user]);
+		}else{
+			Tools::throwWarningMessage('unable to find this user to logout');
+		}
 	}
 	/*
 	*	create All structure
@@ -142,8 +188,9 @@ class Database
 			$query_Create_Rooms_structure = $this->queryCreateRooms($pdo_object);
 			$query_Create_Message_structure = $this->queryCreateMessages($pdo_object);
 			$query_Create_SecuritySystem_structure = $this->queryCreateSecuritySystems($pdo_object);
+			$query_Create_Friend_List = $this->queryCreateFriendList($pdo_object);
 		}
-		return array($query_Create_Users_structure, $query_Create_Chat_structure, $query_Create_Group_structure, $query_Create_Rooms_structure, $query_Create_Message_structure, $query_Create_SecuritySystem_structure);
+		return array($query_Create_Users_structure, $query_Create_Chat_structure, $query_Create_Group_structure, $query_Create_Rooms_structure, $query_Create_Message_structure, $query_Create_SecuritySystem_structure, $query_Create_Friend_List);
 	}
 	/*
 	*	Destoy the db
@@ -182,19 +229,25 @@ class Database
 		if($pdo_object){
 			$sql = 'SELECT * FROM '.$table;
 			echo '<table class="table table-bordered table-hover" style="width:100%;">';
-			foreach($pdo_object->query($sql) as $row){
-				echo '<tr>';
-				foreach($row as $key=>$value){
-					if(is_string($key)){
-						echo '<td>';
-						echo $key. " : ";
-						echo $value;
-						echo '</td>';
+			if($pdo_object->query($sql))
+			{
+				foreach($pdo_object->query($sql) as $row){
+					echo '<tr>';
+					foreach($row as $key=>$value){
+						if(is_string($key)){
+							echo '<td>';
+							echo $key. " : ";
+							echo $value;
+							echo '</td>';
+						}
 					}
+					echo '</tr>';
 				}
-				echo '</tr>';
+				echo '</table>';
+			}else{
+				echo 'Table doesn\'t exists';
+				die();
 			}
-			echo '</table>';
 		}
 	}
 	/*
@@ -238,8 +291,10 @@ class Database
 			return $results;
 		}
 	}
-	/*
-	*	Verif if user exists in DB
+	/**
+	* @args pdo_object, nickname, name, password, email, ip_address
+	* Verif if user exists in DB
+	* @return true:false
 	*/
 	public function queryVerifUserExists($pdo_object, $nickname, $name, $password, $email, $ip_address)
 	{
@@ -250,16 +305,17 @@ class Database
 			$q->bindParam(':ip_address', $ip_address, PDO::PARAM_STR);
 			$q->execute();
 			$result = $q->fetch(PDO::FETCH_ASSOC);
-			if($result['email']&& $result['ip_address']){
+			if($result['email'] && $result['ip_address']){
 				return true;
 			}else{
 				return false;
 			}
 		}
 	}
-	/*
-	*	verif all data before user insert to db
-	*   allinfocorrect? return true: echo 'noncorrectData'
+	/**
+	* @args nickname, name, password, email, ip_address
+	* verif all data before user insert to db
+	* allinfocorrect? return true: echo 'noncorrectData'
 	*/
 	public function verifUserDataCorrect($nickname, $name, $password, $email, $ip_address)
 	{
@@ -274,7 +330,8 @@ class Database
 			return false;
 		}
 	}
-	/*
+	/**
+	* @args nickname
 	* verif function verifNickname
 	* return ? true: false 
 	*/
@@ -290,7 +347,8 @@ class Database
 		}
 		return true;
 	}
-	/*
+	/**
+	* @args name
 	* verif function verifName
 	* return ? true: false 
 	*/
@@ -305,7 +363,8 @@ class Database
 		}
 		return true;
 	}
-	/*
+	/**
+	* @args password
 	* verif function verifPassword
 	* return ? true: false 
 	*/
@@ -320,10 +379,10 @@ class Database
 		}
 		return true;
 	}
-	/*
+	/**
 	* @args email
 	* @return true|false
-	** Basic email control
+	* Basic email control
 	*/
 	public function verifEmailAddress($email)
 	{
@@ -348,7 +407,34 @@ class Database
 			return false;
 		}
 	}
-	/*
+	/**
+	* verification id_user <=> id_group
+	* return correspondence
+	*/
+	public function verifUserToGroupCorrespondence($pdo_object, $id_user)
+	{
+		if($id_user){
+			$sql = "SELECT id_user FROM `groups` WHERE id_user = \"$id_user\" AND id_group = \"$id_user\"";
+			$q = $pdo_object->prepare($sql);
+			$q->execute();
+			$result = $q->fetchAll(PDO::FETCH_ASSOC);
+			return $result[0]['id_user'];
+		}
+	}
+	/**
+	* verif by id if user is logged
+	*/
+	public function verifIsLoggedUser($pdo_object, $id_user)
+	{
+		if($pdo_object && $id_user){
+			if($this->current_id_user_connected[$id_user]){
+				return true;
+			}else{
+				return false;
+			}
+		}
+	}
+	/**
 	*	createGroup to init id and synchronize it with the user table ones
 	*/
 	public function createGroup($pdo_object)
@@ -370,15 +456,15 @@ class Database
 		}
 	}
 	/**
+	* @args pdo_object
+	* @user_host
+	* @id_user
 	* @return true:false
 	* 
 	*/
 	public function queryAddGroupFriendList($pdo_object, $user_host, $id_user)
 	{
-		// resume : add a friend in the friend list 
-		// if this friend already exists do nothing
-		// otherwise verif that id_user correspond to a real user
-		// and then add it to the corresponding column
+		//DB column utilities : friend_list_length; nearby_user_length; seen_user_length 
 		$result = $this->queryVerifUserExistsById($pdo_object, $id_user);
 		if($pdo_object && $result)
 		{
@@ -390,9 +476,29 @@ class Database
 			Tools::throwErrorMessage('queryAddGroupFriendList : id_User doesn\'t exists');
 		}
 	}
-	/*
-	* arg pdo_object
-	* return array id_user
+	/**
+	* @args $pdo_object, $logged_user, $user_friend
+	* @return friend_added ? true : false;
+	*/
+	public function queryAddFriend($pdo_object, $logged_user, $user_friend)
+	{		
+		if($pdo_object && $logged_user && $user_friend 
+			&& $this->verifIsLoggedUser($pdo_object, $logged_user) 
+			&& $this->queryVerifUserExistsById($pdo_object, $user_friend)
+			&& $this->verifUserToGroupCorrespondence($pdo_object, $logged_user))
+		{
+			$sql = "INSERT INTO friend_list (`id_friend_list`,`id_group`,`id_friend`,`date_add_friend`) 
+			VALUES (\"$logged_user\",\"$logged_user\",\"$user_friend\", CURDATE() )";
+			$q = $pdo_object->prepare($sql);
+			$q->execute();
+			return true;
+		}else{
+			Tools::throwWarningMessage('Couldn\'t add friend');
+		}
+	}
+	/**
+	* @arg pdo_object
+	* @return array id_user
 	*/
 	public function querySelectUserId($pdo_object)
 	{
@@ -524,6 +630,25 @@ class Database
 			id_skey INT PRIMARY KEY NOT NULL  AUTO_INCREMENT,
 			id_user INT NOT NULL ,
 			token_key INT NOT NULL
+			)'))
+		{
+			return true;
+		}else{
+			return false;
+		}
+	}
+	/**
+	* Create friend list
+	* @args pdo_object
+	* @return query_status ? true : false
+	*/
+	public function queryCreateFriendList($pdo_object)
+	{
+		if($pdo_object->exec('CREATE TABLE IF NOT EXISTS friend_list(
+			id_friend_list INT NOT NULL,
+			id_group INT NOT NULL,
+			id_friend INT NOT NULL,
+			date_add_friend DATE
 			)'))
 		{
 			return true;
