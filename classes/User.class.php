@@ -20,9 +20,11 @@ class User extends Database
 		// // $this->callQueryInsertUser('Sato8','satoru','warleague@4591','satoru.hem@gmail.con','::1');
 		// // $this->callQueryInsertUser('Sato9','satoru','warleague@4591','satoru.hemm@gmail.con','::1');
 		
-		$this->callLoginProcess('hemmi.satoru@gmail.con', 'warleague@4591');
-		$this->callLoginProcess('satoru.hemmi@gmail.con', 'meinpassword123');
+		
 		// $this->queryAddUserToFriendList($this->pdo_object, $this->current_id_user_connected, 1);	
+	}
+	public function showCurrentUserLogged()
+	{
 		echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
 		var_dump($this->current_id_user_connected);
 		echo '</pre>';
