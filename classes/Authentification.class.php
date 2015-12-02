@@ -3,7 +3,7 @@ class Authentification
 {
 	public function __construct($user_name = null, $nickname = null, $password = null, $email = null, $ip_adress = null)
 	{
-		$db = new Database();
+		$db = new User();
 	}
 	public function dbExists()
 	{

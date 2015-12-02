@@ -94,6 +94,8 @@ A very basic security system.
 - [ ] Security Process of $this->current_id_user_connected (all function related to it)
 - [ ] Friend list improvement (add friend with email, nickname, etc)
 
+- [ ] Class Based structure (problem appeared in Database class where it was too messy to understand the functionnal rôle of Database, dividing it will help improve it)
+
 #RANDOM ALGO && SELFASKS
 User doesn't exists -> register -> user exists
 
