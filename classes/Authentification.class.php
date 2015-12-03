@@ -3,6 +3,7 @@ class Authentification
 {
 	public function __construct($user_name = null, $nickname = null, $password = null, $email = null, $ip_adress = null)
 	{
+		$form = new Form();
 		$db = new User();
 		$db->callLoginProcess('hemmi.satoru@gmail.con', 'warleague@4591');
 		$db->showCurrentUserLogged();
@@ -42,9 +43,9 @@ class Authentification
 	{
 
 	}
-	public function login()
+	public static function login()
 	{
-
+		echo $_POST['name'];
 	}
 	public function isMemberConnected()
 	{
