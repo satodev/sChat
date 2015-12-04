@@ -1,6 +1,5 @@
 document.onreadystatechange = function(){
 	if(document.readyState == "complete"){
-		result = [];
 		AuthentificationDisplay();
 	}
 }
@@ -69,38 +68,56 @@ function hideLogContForm()
 }
 function recursiveChildNodes(args)
 {
+	//target : avoir l'ensemble des nom de noeuds enfants et des id correspondant a partir du noeud défini en paramètres 
+	loop = [];
+	saveArray = [];
+	elem = document.getElementById(args);
+	for(var i = 0; i < elem.childNodes.length; i++){
+		loop[i] = elem.childNodes[i];
+	}
+	for(var j = 0; j < loop.length; j++){
+		console.log(loop[j]);
+		console.log(loop[j].childNodes);
+		if(loop[j].childNodes.length == 0){
+			saveArray.push(loop[j]);
+			loop.splice(j,1);
+		}
+	}
+	console.log(saveArray);
+	console.log(loop);
+	console.log(elem.childNodes);
+	// if(typeof args != 'string'){
+	// 	elem = [];
+	// 	for(var i = 0; i < args.length; i++){
+	// 		elem.push(args[i]);	
+	// 		container = document.getElementById(elem[i]);
+	// 		console.log(container);
 
-	if(typeof args != 'string'){
-		elem = [];
-		for(var i = 0; i < args.length; i++){
-			elem.push(args[i]);	
-			container = document.getElementById(elem[i]);
-			console.log(container);
-			console.log(result);
-			// for(var j = 0; j < elem.childNodes.length; j++){
-			// 	if(elem.childNodes[j] != null){
-			// 		loop = elem.childNodes[j];
-			// 		result.push(loop);	
-			// 	}	
-			// }
-			// recursiveChildNodes(result);
-		}
-	}else{
-		start_node = document.getElementById(args);
-		console.log(start_node.childNodes.length);
-		for(var i = 0; i < start_node.childNodes.length; i++){
-			if(start_node.childNodes[i] != null){
-				loop = start_node.childNodes[i];
-				if(loop.id){
-					result.push(loop.id);	
-					console.log(result);
-				}
-			}	
-		}
-		recursiveChildNodes(result);
-	}
-	if(result.length >= 10){
-		throw new Error('too long');
-	}
+	// 		console.log(result);
+	// 		// for(var j = 0; j < elem.childNodes.length; j++){
+	// 		// 	if(elem.childNodes[j] != null){
+	// 		// 		loop = elem.childNodes[j];
+	// 		// 		result.push(loop);	
+	// 		// 	}	
+	// 		// }
+	// 		// recursiveChildNodes(result);
+	// 	}
+	// }else{
+	// 	start_node = document.getElementById(args);
+	// 	console.log(start_node.childNodes.length);
+	// 	for(var i = 0; i < start_node.childNodes.length; i++){
+	// 		if(start_node.childNodes[i] != null){
+	// 			loop = start_node.childNodes[i];
+	// 			if(loop.id){
+	// 				result.push(loop.id);	
+	// 				console.log(result);
+	// 			}
+	// 		}	
+	// 	}
+	// 	recursiveChildNodes(result);
+	// }
+	// if(result.length >= 10){
+	// 	throw new Error('too long');
+	// }
 
 }
