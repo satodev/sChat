@@ -1,5 +1,6 @@
 document.onreadystatechange = function(){
 	if(document.readyState == "complete"){
+		result = [];
 		AuthentificationDisplay();
 	}
 }
@@ -18,13 +19,7 @@ function AuthentificationDisplay()
 {
 	sub_btn = document.getElementById('subcribe_button');
 	log_btn = document.getElementById('login_button');
-	mm = document.getElementById('main_menu');
-	for(i in  mm.children){
-		console.log(i);
-		if(i == 'subscribe_container'){
-			//roll on all those children and get the id
-		}
-	}
+	recursiveChildNodes('main_menu');
 	hideSubContForm();
 	hideLogContForm();
 	sub_btn.onclick = function(e){
@@ -71,4 +66,41 @@ function hideLogContForm()
 	log_cont = document.getElementById('login_container');
 	log_cont_form = log_cont.getElementsByTagName('form');
 	log_cont_form[0].style.display = 'none';
+}
+function recursiveChildNodes(args)
+{
+
+	if(typeof args != 'string'){
+		elem = [];
+		for(var i = 0; i < args.length; i++){
+			elem.push(args[i]);	
+			container = document.getElementById(elem[i]);
+			console.log(container);
+			console.log(result);
+			// for(var j = 0; j < elem.childNodes.length; j++){
+			// 	if(elem.childNodes[j] != null){
+			// 		loop = elem.childNodes[j];
+			// 		result.push(loop);	
+			// 	}	
+			// }
+			// recursiveChildNodes(result);
+		}
+	}else{
+		start_node = document.getElementById(args);
+		console.log(start_node.childNodes.length);
+		for(var i = 0; i < start_node.childNodes.length; i++){
+			if(start_node.childNodes[i] != null){
+				loop = start_node.childNodes[i];
+				if(loop.id){
+					result.push(loop.id);	
+					console.log(result);
+				}
+			}	
+		}
+		recursiveChildNodes(result);
+	}
+	if(result.length >= 10){
+		throw new Error('too long');
+	}
+
 }
