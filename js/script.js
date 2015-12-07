@@ -1,6 +1,7 @@
 document.onreadystatechange = function(){
 	if(document.readyState == "complete"){
 		AuthentificationDisplay();
+		hideContForm();
 	}
 }
 
@@ -18,7 +19,6 @@ function AuthentificationDisplay()
 {
 	sub_btn = document.getElementById('subcribe_button');
 	log_btn = document.getElementById('login_button');
-	recursiveChildNodes('main_menu');
 	hideSubContForm();
 	hideLogContForm();
 	sub_btn.onclick = function(e){
@@ -30,16 +30,6 @@ function AuthentificationDisplay()
 		e.preventDefault();
 		showLogContForm();
 		hideSubContForm();
-	}
-	document.onclick = function(e){
-		if(e.target.id !== 'subcribe_button')
-		{
-			hideSubContForm();
-		}
-		if(e.target.id !== 'login_button')
-		{
-			hideLogContForm();
-		}
 	}
 }
 function showSubContForm()
@@ -66,58 +56,30 @@ function hideLogContForm()
 	log_cont_form = log_cont.getElementsByTagName('form');
 	log_cont_form[0].style.display = 'none';
 }
-function recursiveChildNodes(args)
+function hideContForm()
 {
 	//target : avoir l'ensemble des nom de noeuds enfants et des id correspondant a partir du noeud défini en paramètres 
-	loop = [];
-	saveArray = [];
-	elem = document.getElementById(args);
-	for(var i = 0; i < elem.childNodes.length; i++){
-		loop[i] = elem.childNodes[i];
-	}
-	for(var j = 0; j < loop.length; j++){
-		console.log(loop[j]);
-		console.log(loop[j].childNodes);
-		if(loop[j].childNodes.length == 0){
-			saveArray.push(loop[j]);
-			loop.splice(j,1);
+	document.onclick = function(event){
+		var i;
+		var sub_cont_form_status = false;
+		var sub_cont_log_status = false;
+		for (i = 0; i < event.path.length; i++){
+			if( event.path[i].id == 'subscribe_container' || event.target.id == 'subcribe_button'){
+				sub_cont_form_status = true;
+				showSubContForm();
+				break;
+			}
+			if( event.path[i].id == 'login_container' || event.target.id == 'login_button'){
+				sub_cont_log_status = true;
+				showLogContForm();
+				break;
+			}
+			if(i == event.path.length - 1) {
+				hideLogContForm();
+				hideSubContForm();
+			}
 		}
 	}
-	console.log(saveArray);
-	console.log(loop);
-	console.log(elem.childNodes);
-	// if(typeof args != 'string'){
-	// 	elem = [];
-	// 	for(var i = 0; i < args.length; i++){
-	// 		elem.push(args[i]);	
-	// 		container = document.getElementById(elem[i]);
-	// 		console.log(container);
-
-	// 		console.log(result);
-	// 		// for(var j = 0; j < elem.childNodes.length; j++){
-	// 		// 	if(elem.childNodes[j] != null){
-	// 		// 		loop = elem.childNodes[j];
-	// 		// 		result.push(loop);	
-	// 		// 	}	
-	// 		// }
-	// 		// recursiveChildNodes(result);
-	// 	}
-	// }else{
-	// 	start_node = document.getElementById(args);
-	// 	console.log(start_node.childNodes.length);
-	// 	for(var i = 0; i < start_node.childNodes.length; i++){
-	// 		if(start_node.childNodes[i] != null){
-	// 			loop = start_node.childNodes[i];
-	// 			if(loop.id){
-	// 				result.push(loop.id);	
-	// 				console.log(result);
-	// 			}
-	// 		}	
-	// 	}
-	// 	recursiveChildNodes(result);
-	// }
-	// if(result.length >= 10){
-	// 	throw new Error('too long');
-	// }
+	
 
 }
