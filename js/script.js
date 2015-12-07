@@ -64,13 +64,13 @@ function hideContForm()
 		var sub_cont_form_status = false;
 		var sub_cont_log_status = false;
 		for (i = 0; i < event.path.length; i++){
-			if( event.path[i].id == 'subscribe_container' || event.target.id == 'subcribe_button'){
+			if(event.path[i].id == 'subscribe_container' || event.target.id == 'subcribe_button'){
 				sub_cont_form_status = true;
 				showSubContForm();
 				hideLogContForm();
 				break;
 			}
-			if( event.path[i].id == 'login_container' || event.target.id == 'login_button'){
+			if(event.path[i].id == 'login_container' || event.target.id == 'login_button'){
 				sub_cont_log_status = true;
 				showLogContForm();
 				hideSubContForm();

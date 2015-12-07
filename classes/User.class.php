@@ -10,7 +10,7 @@ class User extends Database
 
 		//testing user here
 
-		// // $this->callQueryInsertUser('Sat','satoru','warleague@4591','hemmi.satoru@gmail.con','::1');
+		$this->callQueryInsertUser('Syntox','sat','warleague@4591','hemmi.satoru@gmail.com','::1');
 		// // $this->callQueryInsertUser('Sato1','sato1','meinpassword123','satoru.hemmi@gmail.con','::1');
 		// // $this->callQueryInsertUser('Sato2','satoru','warleague@4591','s.hemmi@gmail.con','::1');
 		// // $this->callQueryInsertUser('Sato3','satoru','warleague@4591','sa.hemmi@gmail.con','::1');
@@ -41,7 +41,8 @@ class User extends Database
 		$user_data_correct = $this->verifUserDataCorrect($nickname, $name, $password, $email, $ip_address);
 		if($user_data_correct){
 			$this->queryInsertUser($pdo_object, $nickname, $name, $password, $email, $ip_address);
-			$this->createGroup($pdo_object);
+			$group = new Group();
+			$group->createGroup($pdo_object);
 		}else{
 			Tools::throwErrorMessage('user_data_incorrect');
 		}
@@ -127,14 +128,15 @@ class User extends Database
 		if($pdo_object && $nickname && $name && $password && $email && $ip_address){
 			$user_exists = $this->queryVerifUserExists($pdo_object, $nickname, $name, $password, $email, $ip_address);
 			if($user_exists == false){
-				$q = $pdo_object->prepare('INSERT INTO users (nickname, name, password, email, ip_address)
+				$sql = 'INSERT INTO users (nickname, name, password, email, ip_address)
 					VALUES (
 						:nickname,
 						:name,
-						:password,
+						MD5(:password),
 						:email,
 						:ip_address
-						)');
+						)';
+				$q = $pdo_object->prepare($sql);
 				$q->bindParam(':nickname', $nickname,PDO::PARAM_STR);
 				$q->bindParam(':name', $name, PDO::PARAM_STR);
 				$q->bindParam(':password', $password, PDO::PARAM_STR);

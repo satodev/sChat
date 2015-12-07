@@ -17,6 +17,9 @@ class Form
 			foreach($_POST as $key => $value){
 				array_push($array_key, $key);
 				array_push($array_value, $value);
+				if($key == "type_of_form"){
+					echo '<br />detected<br />';
+				}
 			}
 			$this->post_name = $array_key;
 			$this->post_value = $array_value;
