@@ -8,12 +8,10 @@ class Database
 	{
 		$this->pdo_object = $this->connect();
 		$this->table_name = array('chats','groups', 'messages', 'rooms', 'security_systems', 'users', 'friend_list');
+		$this->callAddFriend(1, 2);
 		//testing function (they will be called in sChat class after that)
 		// $this->callCreateAllStructure();
 		// // $this->querySelectAllDataTable($this->pdo_object, 'users');	
-		
-		$this->callAddFriend(1, 2);
-		
 		
 		// $this->callQueryLogoutProcess(3);
 
@@ -66,6 +64,14 @@ class Database
 		$pdo_object = $this->pdo_object;
 		$table_name = $this->table_name;
 		$this->destoyDbStructures($pdo_object, $table_name);
+	}
+	/**
+	*
+	*/
+	public function callAddFriend($logged_user, $user_friend)
+	{
+		$pdo_object = $this->pdo_object;
+		$this->queryAddFriend($pdo_object, $logged_user, $user_friend);
 	}
 	/*
 	*	create All structure

@@ -7,6 +7,7 @@ class User extends Database
 	public function __construct()
 	{
 		$this->pdo_object = $this->connect();
+
 		//testing user here
 
 		// // $this->callQueryInsertUser('Sat','satoru','warleague@4591','hemmi.satoru@gmail.con','::1');
@@ -68,14 +69,6 @@ class User extends Database
 	{
 		$pdo_object = $this->pdo_object;
 		$this->queryLogoutProcess($pdo_object, $id_user);
-	}
-	/**
-	*
-	*/
-	public function callAddFriend($logged_user, $user_friend)
-	{
-		$pdo_object = $this->pdo_object;
-		$this->queryAddFriend($pdo_object, $logged_user, $user_friend);
 	}
 	/**
 	* login process
