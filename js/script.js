@@ -67,11 +67,13 @@ function hideContForm()
 			if( event.path[i].id == 'subscribe_container' || event.target.id == 'subcribe_button'){
 				sub_cont_form_status = true;
 				showSubContForm();
+				hideLogContForm();
 				break;
 			}
 			if( event.path[i].id == 'login_container' || event.target.id == 'login_button'){
 				sub_cont_log_status = true;
 				showLogContForm();
+				hideSubContForm();
 				break;
 			}
 			if(i == event.path.length - 1) {
