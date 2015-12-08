@@ -21,8 +21,12 @@ class Authentification
 		if($form->returnTypeOfForm() == 'login'){
 			$name = $form->retreiveFormValueByName('name');
 			$pwd = $form->retreiveFormValueByName('password');
-			if($user->callLoginProcess($name, $pwd)){
-				Tools::setCookie($name, $name,100000);
+			$id = $user->callLoginProcess($name, $pwd);
+			echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
+			var_dump($id);
+			echo '</pre>';
+			if($id){
+				Tools::setCookie($id, $name,100000);
 				echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
 				var_dump($_COOKIE);
 				echo '</pre>';

@@ -31,4 +31,10 @@
 			<input type="submit" value="go">
 		</form>
 	</section>
+	<section id="logout_container">
+		<form action="" method="POST">
+			<input type="text" name="type_of_form" value="Logout" style="visibility:hidden; display:none;">
+			<input type="submit" value="Logout"></input>
+		</form>
+	</section>
 </div>

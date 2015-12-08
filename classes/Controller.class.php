@@ -144,42 +144,46 @@ class Controller
 			switch($current_page)
 			{
 				case 'index':
-					$this->indexController();
+				$this->indexController();
 				break;
 				case 'rooms' : 
-					$this->roomsController();
+				$this->roomsController();
 				break;
 				case 'chat':
-					$this->chatController();
+				$this->chatController();
 				break;
 				case 'contact':
-					$this->contactController();
+				$this->contactController();
 				break;
 			}
 		}
 	}
 	public function indexController()
 	{
-				echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
-				var_dump($_COOKIE);
-				echo '</pre>';
 		//authentification controller && security controller
 		$auth = new Authentification();
-		Authentification::login();
+		echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
+		var_dump($_COOKIE);
+		echo '</pre>';
+		if(isset($_COOKIE)){
+
+		}else{
+			Authentification::login();
+		}
 	}
 	public function roomsController()
 	{
 		//rooms listing
-			echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
-				var_dump($_COOKIE);
-				echo '</pre>';
+		echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
+		var_dump($_COOKIE);
+		echo '</pre>';
 	}
 	public function chatController()
 	{
 		//chatting interface
 		echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
-				var_dump($_COOKIE);
-				echo '</pre>';
+		var_dump($_COOKIE);
+		echo '</pre>';
 	}
 	public function contactController()
 	{

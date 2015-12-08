@@ -57,7 +57,7 @@ class User extends Database
 		$pdo_object = $this->pdo_object;
 		$verif_current_id_user =  $this->queryLoginProcess($pdo_object, $login, $mdp);
 		if($pdo_object && $login && $mdp && $verif_current_id_user && $this->current_id_user_connected[$verif_current_id_user]){
-			return true;
+			return $verif_current_id_user;
 		}else{
 			return false;
 		}
