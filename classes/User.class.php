@@ -10,7 +10,7 @@ class User extends Database
 
 		//testing user here
 
-		$this->callQueryInsertUser('Syntox','sat','warleague@4591','hemmi.satoru@gmail.com','::1');
+		// $this->callQueryInsertUser('Syntox','sat','warleague@4591','hemmi.satoru@gmail.com','::1');
 		// // $this->callQueryInsertUser('Sato1','sato1','meinpassword123','satoru.hemmi@gmail.con','::1');
 		// // $this->callQueryInsertUser('Sato2','satoru','warleague@4591','s.hemmi@gmail.con','::1');
 		// // $this->callQueryInsertUser('Sato3','satoru','warleague@4591','sa.hemmi@gmail.con','::1');
@@ -70,6 +70,14 @@ class User extends Database
 	{
 		$pdo_object = $this->pdo_object;
 		$this->queryLogoutProcess($pdo_object, $id_user);
+	}
+	/**
+	*
+	*/
+	public function callVerifUserExistsById($id_user)
+	{
+		$pdo_object = $this->pdo_object;
+		$this->queryVerifUserExistsById($pdo_object, $id_user);
 	}
 	/**
 	* login process
@@ -149,6 +157,7 @@ class User extends Database
 		}
 	}
 	/**
+	* @param pdo_object, id_user
 	* @return id_user ? true: false
 	*/
 	public function queryVerifUserExistsById($pdo_object, $id_user)
@@ -259,7 +268,7 @@ class User extends Database
 	{
 		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     		// invalid emailaddress
-			Tools::throwWarningMessage('email is not valid');
+			// Tools::throwWarningMessage('email is not valid');
 			return false;
 		}
 		return true;

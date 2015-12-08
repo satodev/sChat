@@ -43,4 +43,8 @@ class Tools{
 	{
 		echo self::$test_login;
 	}
+	public static function setCookie($name, $value, $time=NULL)
+	{
+		setcookie($name, $value, time()+$time);
+	}
 }

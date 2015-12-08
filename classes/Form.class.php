@@ -1,13 +1,34 @@
 <?php
+/*
+*	This class must detect the type of form and retreive the information related to it
+* 	it will allow developpers to easily use form datas sent
+*/
 class Form
 {
 	private $post_name;
 	private $post_value;
+	private $type_of_form;
+
 	public function __construct()
 	{
+		$this->detectTypeOfForm();
 		$this->detectPostName();
-		$this->showPostSet();
+		// $this->showPostSet();
 		// echo $this->retreiveFormValueByName('type_of_form');
+	}
+	public function returnTypeOfForm()
+	{
+		if($this->type_of_form){
+			return $this->type_of_form;
+		}else{
+			echo Tools::throwWarningMessage('Type of form not defined');
+		}
+	}
+	public function detectTypeOfForm()
+	{
+		if(isset($_POST) && isset($_POST['type_of_form'])){
+			$this->type_of_form = $_POST['type_of_form'];
+		}
 	}
 	public function detectPostName()
 	{
@@ -17,9 +38,6 @@ class Form
 			foreach($_POST as $key => $value){
 				array_push($array_key, $key);
 				array_push($array_value, $value);
-				if($key == "type_of_form"){
-					echo '<br />detected<br />';
-				}
 			}
 			$this->post_name = $array_key;
 			$this->post_value = $array_value;
@@ -41,6 +59,8 @@ class Form
 					return $_POST[$data];
 				}
 			}
+		}else{
+			Tools::throwErrorMessage('post_name || args not valid');
 		}
 	}
 }

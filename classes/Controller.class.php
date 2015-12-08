@@ -160,17 +160,26 @@ class Controller
 	}
 	public function indexController()
 	{
+				echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
+				var_dump($_COOKIE);
+				echo '</pre>';
 		//authentification controller && security controller
 		$auth = new Authentification();
-
+		Authentification::login();
 	}
 	public function roomsController()
 	{
 		//rooms listing
+			echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
+				var_dump($_COOKIE);
+				echo '</pre>';
 	}
 	public function chatController()
 	{
 		//chatting interface
+		echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
+				var_dump($_COOKIE);
+				echo '</pre>';
 	}
 	public function contactController()
 	{
