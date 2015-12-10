@@ -13,7 +13,7 @@ class Form
 	{
 		$this->detectTypeOfForm();
 		$this->detectPostName();
-		// $this->showPostSet();
+		$this->showPostSet();
 		// echo $this->retreiveFormValueByName('type_of_form');
 	}
 	public function returnTypeOfForm()

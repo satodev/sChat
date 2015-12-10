@@ -4,21 +4,11 @@ document.onreadystatechange = function(){
 		hideContForm();
 	}
 }
-
-function ajaxLoad(){
-	var x = new XMLHttpRequest();
-	x.onreadystatechange = function(){
-		if(x.readyState== 4 && x.status == 200){
-			console.log(x.responseText);
-		}
-	}
-	x.open("GET","index.php?id=1",true);
-	x.send();
-}
 function AuthentificationDisplay()
 {
 	sub_btn = document.getElementById('subcribe_button');
 	log_btn = document.getElementById('login_button');
+	logout_btn = document.getElementById('logout_button');
 	hideSubContForm();
 	hideLogContForm();
 	sub_btn.onclick = function(e){
@@ -31,30 +21,50 @@ function AuthentificationDisplay()
 		showLogContForm();
 		hideSubContForm();
 	}
+	logout_btn.onclick = function(e){
+		e.preventDefault();
+		sendFormAjax('logout');
+	}
+}
+function sendFormAjax(arg)
+{
+	ajax = new XMLHttpRequest();
+	ajax.onreadystatechange = function(e){
+		if(ajax.readyState = 4 && ajax.status == 200){
+			console.log(ajax.responseText);
+		}
+	}
+	ajax.open('POST', 'classes/Form.class.php', true);
+	if(arg){
+		ajax.send();	
+	}else{
+		ajax.send();
+	}
+	
 }
 function showSubContForm()
 {
 	sub_cont = document.getElementById("subscribe_container");
-	sub_cont_form = sub_cont.getElementsByTagName('form');
-	sub_cont_form[0].style.display = "block";
+	sub_cont_form = document.getElementById('subscribe_form');
+	sub_cont_form.style.display = "block";
 }
 function showLogContForm()
 {
 	log_cont = document.getElementById('login_container');
-	log_cont_form = log_cont.getElementsByTagName('form');
-	log_cont_form[0].style.display = 'block';
+	log_cont_form = document.getElementById('login_form');
+	log_cont_form.style.display = 'block';
 }
 function hideSubContForm()
 {
 	sub_cont = document.getElementById("subscribe_container");
-	sub_cont_form = sub_cont.getElementsByTagName('form');
-	sub_cont_form[0].style.display = "none";
+	sub_cont_form = document.getElementById('subscribe_form');
+	sub_cont_form.style.display = "none";
 }
 function hideLogContForm()
 {
 	log_cont = document.getElementById('login_container');
-	log_cont_form = log_cont.getElementsByTagName('form');
-	log_cont_form[0].style.display = 'none';
+	log_cont_form = document.getElementById('login_form');
+	log_cont_form.style.display = 'none';
 }
 function hideContForm()
 {
