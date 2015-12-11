@@ -162,6 +162,7 @@ class Controller
 	{
 		//authentification controller && security controller
 		$auth = new Authentification();
+		
 		// session_start();
 		// $_SESSION['name'] = "MyName";
 		// echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';

@@ -30,17 +30,13 @@ function sendFormAjax(arg)
 {
 	ajax = new XMLHttpRequest();
 	ajax.onreadystatechange = function(e){
-		if(ajax.readyState = 4 && ajax.status == 200){
-			console.log(ajax.responseText);
+		if(ajax.readyState == 4 && ajax.status == 200){
+			console.log(ajax.responseText)
 		}
 	}
-	ajax.open('POST', 'classes/Form.class.php', true);
-	if(arg){
-		ajax.send();	
-	}else{
-		ajax.send();
-	}
-	
+	ajax.open('POST', 'script/ajax.php', true);
+	ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	ajax.send("logout=true");
 }
 function showSubContForm()
 {
