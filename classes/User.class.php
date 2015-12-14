@@ -21,13 +21,12 @@ class User extends Database
 		// // $this->callQueryInsertUser('Sato8','satoru','warleague@4591','satoru.hem@gmail.con','::1');
 		// // $this->callQueryInsertUser('Sato9','satoru','warleague@4591','satoru.hemm@gmail.con','::1');
 		
-		
 		// $this->queryAddUserToFriendList($this->pdo_object, $this->current_id_user_connected, 1);	
 	}
 	public function showCurrentUserLogged()
 	{
 		echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
-		var_dump($this->current_id_user_connected);
+		var_dump($_SESSION['name']);
 		echo '</pre>';
 	}
 	/**
@@ -99,6 +98,8 @@ class User extends Database
 				if($result){
 					// echo 'nickname login : id is : '.$result[0]['id_user'];
 					$this->current_id_user_connected[$result[0]['id_user']] = $result[0]['id_user'];
+					session_start();
+
 					return $result[0]['id_user'];
 				}
 			}

@@ -47,4 +47,23 @@ class Tools{
 	{
 		setcookie($name, $value, time()+$time);
 	}
+	public static function writeJsonFile($file_name, $content)
+	{
+		if($file_name && $content){
+			$fp = fopen('data/'.$file_name.'.json', 'w');
+			fwrite($fp, json_encode($content));
+			fclose($fp);
+		}
+	}
+	public static function readJsonFile($file_name)
+	{
+		if($file_name){
+			$string = file_get_contents('data/'.$file_name.'.json');
+			$json_a = json_decode($string, true);
+
+			foreach ($json_a as $person_a) {
+				echo $person_a.'<br />';
+			}
+		}
+	}
 }

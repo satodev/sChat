@@ -163,19 +163,16 @@ class Controller
 		//authentification controller && security controller
 		$auth = new Authentification();
 		
-		// session_start();
-		// $_SESSION['name'] = "MyName";
-		// echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
-		// var_dump($_SESSION['name']);
-		// echo '</pre>';
-		// echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
-		// var_dump($_COOKIE);
-		// echo '</pre>';
-		// if(isset($_COOKIE)){
-
-		// }else{
-		// 	Authentification::login();
-		// }
+		session_start();
+		$_SESSION['name'] = "MyName";
+		echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
+		var_dump($_SESSION['name']);
+		echo '</pre>';
+		for($a = 0; $a < 10; $a++){
+			$ar = array($a => $a);
+			Tools::writeJsonFile('test'.$a, $ar);	
+		}
+		Tools::readJsonFile('test');
 	}
 	public function roomsController()
 	{
