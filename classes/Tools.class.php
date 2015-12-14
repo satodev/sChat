@@ -66,4 +66,13 @@ class Tools{
 			}
 		}
 	}
+	public static function recursiveArray($array)
+	{
+		foreach($array as $key => $value){
+			if(gettype($value) == "array"){
+				echo $value;
+				Tools::recursiveArray($value);
+			}
+		}
+	}
 }
