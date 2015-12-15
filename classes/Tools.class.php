@@ -49,29 +49,64 @@ class Tools{
 	}
 	public static function writeJsonFile($file_name, $content)
 	{
-		if($file_name && $content){
+		if($file_name && $content && file_exists('data')){
 			$fp = fopen('data/'.$file_name.'.json', 'w');
 			fwrite($fp, json_encode($content));
 			fclose($fp);
+		}else{
+			if(Tools::mkdir('data')){
+				Tools::writeJsonFile($file_name,$content);
+			}else{
+				Tools::throwErrorMessage('couldn`t write in file');
+			}
+		}
+	}
+	public static function mkdir($folder_name)
+	{
+		if($folder_name && !file_exists($folder_name)){
+			mkdir($folder_name);
+			return true;
+		}else{
+			return false;
 		}
 	}
 	public static function readJsonFile($file_name)
 	{
-		if($file_name){
+		if($file_name && file_exists('data')){
 			$string = file_get_contents('data/'.$file_name.'.json');
 			$json_a = json_decode($string, true);
-
-			foreach ($json_a as $person_a) {
-				echo $person_a.'<br />';
+			Tools::recursiveParseArray($json_a);
+		}else{
+			if(Tools::mkdir('data')){
+				Tools::readJsonfile($file_name);
+			}else{
+				Tools::throwErrorMessage('couldn`t read in file');
+			}
+		}
+	}	
+	public static function deleteJsonFile($file_name=NULL)
+	{
+		if($file_name){
+			unlink('data/'.$file_name.'.json');
+			return true;
+		}else{
+			$dir = scandir('data');
+			foreach($dir as $elem){
+				echo $elem.'<br />';
+				if($elem != "." && $elem != ".."){
+					unlink('data/'.$elem);
+				}
 			}
 		}
 	}
-	public static function recursiveArray($array)
+	public static function recursiveParseArray($array)
 	{
-		foreach($array as $key => $value){
-			if(gettype($value) == "array"){
-				echo $value;
-				Tools::recursiveArray($value);
+		foreach($array as $key=>$a){
+			if(gettype($a) == 'string'){
+				echo $key .'=>'.$a.'<br />';
+			}else{
+				echo $key.'<br />';
+				Tools::recursiveParseArray($a);
 			}
 		}
 	}

@@ -25,9 +25,7 @@ class User extends Database
 	}
 	public function showCurrentUserLogged()
 	{
-		echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
-		var_dump($_SESSION['name']);
-		echo '</pre>';
+		Tools::readJsonFile('data/user.json');
 	}
 	/**
 	* pdo_dependant function

@@ -162,19 +162,10 @@ class Controller
 	{
 		//authentification controller && security controller
 		$auth = new Authentification();
-		
-		// session_start();
-		// $_SESSION['name'] = "MyName";
-		// echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
-		// var_dump($_SESSION['name']);
-		// echo '</pre>';
-		// for($a = 0; $a < 10; $a++){
-		// 	$ar = array($a => $a);
-		// 	Tools::writeJsonFile('test'.$a, $ar);	
-		// }
-		// Tools::readJsonFile('test');
-		$a = array("1" => array("1" =>"data1"), "2" => "data2", "3" => "data3");
-		Tools::recursiveArray($a);
+		// $array = array("user1" => array("name", "password_cripted"), "user2"=> array("user_name","password_cripted"));
+		Tools::writeJsonFile('user', $array);
+		Tools::readJsonFile('user');
+		Tools::deleteJsonFile();
 	}
 	public function roomsController()
 	{
