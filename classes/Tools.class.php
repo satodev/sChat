@@ -70,12 +70,16 @@ class Tools{
 			return false;
 		}
 	}
-	public static function readJsonFile($file_name)
+	public static function readJsonFile($file_name, $specific_key=NULL)
 	{
-		if($file_name && file_exists('data')){
+		if($file_name && file_exists('data') && file_exists('data/'.$file_name.'.json')){
 			$string = file_get_contents('data/'.$file_name.'.json');
 			$json_a = json_decode($string, true);
-			Tools::recursiveParseArray($json_a);
+			if($specific_key){
+				Tools::recursiveParseArray($json_a[$specific_key]);
+			}else{
+				Tools::recursiveParseArray($json_a);
+			}
 		}else{
 			if(Tools::mkdir('data')){
 				Tools::readJsonfile($file_name);
@@ -89,7 +93,7 @@ class Tools{
 		if($file_name){
 			unlink('data/'.$file_name.'.json');
 			return true;
-		}else{
+		}else if(file_exists('data')){
 			$dir = scandir('data');
 			foreach($dir as $elem){
 				echo $elem.'<br />';

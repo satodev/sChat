@@ -162,10 +162,11 @@ class Controller
 	{
 		//authentification controller && security controller
 		$auth = new Authentification();
-		// $array = array("user1" => array("name", "password_cripted"), "user2"=> array("user_name","password_cripted"));
+		$array = array("user1" => array("name", "password_cripted"), "user2"=> array("user_name","password_cripted"));
+		// $array = array("1","2","3");
 		Tools::writeJsonFile('user', $array);
 		Tools::readJsonFile('user');
-		Tools::deleteJsonFile();
+		// Tools::deleteJsonFile();
 	}
 	public function roomsController()
 	{
