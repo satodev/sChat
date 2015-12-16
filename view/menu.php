@@ -14,8 +14,7 @@
 	<section id="subscribe_container">
 		<a id="subcribe_button" href="#">Subscribe</a>
 		<div id="subscribe_form">
-			<input type="text" name="type_of_form" value="subscribe" style="visibility:hidden; display:none;">
-			<input type="text" name="nickname" placeholder="Pseudo">
+			<input type="text" name="pseudo" placeholder="Pseudo">
 			<input type="text" name="email" placeholder="Email">
 			<input type="text" name="name" placeholder="Name">
 			<input type="password" name="password" placeholder="Password">
@@ -25,8 +24,7 @@
 	<section id="login_container">
 		<a id="login_button" href="#">Login</a>
 		<div id="login_form">
-			<input type="text" name="type_of_form" value="login" style="visibility:hidden; display:none;">
-			<input type="text" name="name" placeholder="Email/Pseudo">
+			<input type="text" name="login" placeholder="Email/Pseudo">
 			<input type="password" name="password" placeholder="Password">
 			<input type="submit" value="go">
 		</div>

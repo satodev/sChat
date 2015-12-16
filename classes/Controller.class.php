@@ -162,28 +162,15 @@ class Controller
 	{
 		//authentification controller && security controller
 		$auth = new Authentification();
-		$array = array("1" => array("login"=>"name", "password"=>"password_cripted"), "2"=> array("login"=>"user_name", "password"=>"password_cripted"));
-		// $array = array("1","2","3");
-
-		LocalData::writeJsonFile($array);
-		LocalData::readJsonFile();
-		Tools::arraySearch('1', $array);
-		// Tools::searchLoginProcessJson('user', 'name', 'password_cripted');
-		// Tools::deleteJsonFile();
+		
 	}
 	public function roomsController()
 	{
 		//rooms listing
-		echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
-		var_dump($_COOKIE);
-		echo '</pre>';
 	}
 	public function chatController()
 	{
 		//chatting interface
-		echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
-		var_dump($_COOKIE);
-		echo '</pre>';
 	}
 	public function contactController()
 	{
