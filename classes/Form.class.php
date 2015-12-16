@@ -11,9 +11,10 @@ class Form
 
 	public function __construct()
 	{
-		$this->detectTypeOfForm();
+		// $this->detectTypeOfForm();
 		$this->detectPostName();
 		$this->showPostSet();
+		$this->detectFormAction();
 		// echo $this->retreiveFormValueByName('type_of_form');
 	}
 	public function returnTypeOfForm()
@@ -41,6 +42,12 @@ class Form
 			}
 			$this->post_name = $array_key;
 			$this->post_value = $array_value;
+		}
+	}
+	public function detectFormAction()
+	{
+		if(isset($_POST) && isset($_POST['user']) && isset($_POST['pwd'])){
+			return 'login';
 		}
 	}
 	public function showPostSet()

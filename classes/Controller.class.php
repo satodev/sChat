@@ -162,7 +162,6 @@ class Controller
 	{
 		//authentification controller && security controller
 		$auth = new Authentification();
-		
 	}
 	public function roomsController()
 	{

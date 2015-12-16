@@ -3,6 +3,9 @@ class Authentification
 {
 	private static $form;
 	private static $user;
+	private static $login_user;
+	private static $login_pwd;
+
 	public function __construct()
 	{	
 		Authentification::$form = new Form();
@@ -17,24 +20,17 @@ class Authentification
 	public static function login()
 	{
 		$form = Authentification::$form;
-		$user = Authentification::$user;
-		if($form->returnTypeOfForm() == 'login'){
-			$name = $form->retreiveFormValueByName('name');
-			$pwd = $form->retreiveFormValueByName('password');
-			$id = $user->callLoginProcess($name, $pwd);
-			echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
-			var_dump($id);
-			echo '</pre>';
-			if($id){
-				Tools::setCookie($id, $name,100000);
-				echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
-				var_dump($_COOKIE);
-				echo '</pre>';
-			}else{
-				Tools::throwWarningMessage('wrong identification');
-			}
+		
+		$id = $user->callLoginProcess(Authentification::$login_user, Authentification::$login_pwd);
+		echo '<pre style="font-family: sans-serif; font-size: 1.5rem;display:block; width: 100%; word-wrap: break-word;">';
+		var_dump($id);
+		echo '</pre>';
+		if($id){
+
+		}else{
+			Tools::throwWarningMessage('wrong identification');
 		}
-			Authentification::isMemberConnected();
+		Authentification::isMemberConnected();
 	}
 	public static function logout()
 	{
@@ -48,6 +44,6 @@ class Authentification
 	}
 	public static function signin()
 	{
-		
+
 	}
 }
