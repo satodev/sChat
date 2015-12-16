@@ -32,7 +32,6 @@ class Tools{
 		{
 			$ip = $remote;
 		}
-
 		return $ip;
 	}
 	public static function callSetTestLogin($arg)
@@ -47,20 +46,6 @@ class Tools{
 	{
 		setcookie($name, $value, time()+$time);
 	}
-	public static function writeJsonFile($file_name, $content)
-	{
-		if($file_name && $content && file_exists('data')){
-			$fp = fopen('data/'.$file_name.'.json', 'w');
-			fwrite($fp, json_encode($content));
-			fclose($fp);
-		}else{
-			if(Tools::mkdir('data')){
-				Tools::writeJsonFile($file_name,$content);
-			}else{
-				Tools::throwErrorMessage('couldn`t write in file');
-			}
-		}
-	}
 	public static function mkdir($folder_name)
 	{
 		if($folder_name && !file_exists($folder_name)){
@@ -70,48 +55,20 @@ class Tools{
 			return false;
 		}
 	}
-	public static function readJsonFile($file_name, $specific_key=NULL)
-	{
-		if($file_name && file_exists('data') && file_exists('data/'.$file_name.'.json')){
-			$string = file_get_contents('data/'.$file_name.'.json');
-			$json_a = json_decode($string, true);
-			if($specific_key){
-				Tools::recursiveParseArray($json_a[$specific_key]);
-			}else{
-				Tools::recursiveParseArray($json_a);
-			}
-		}else{
-			if(Tools::mkdir('data')){
-				Tools::readJsonfile($file_name);
-			}else{
-				Tools::throwErrorMessage('couldn`t read in file');
-			}
-		}
-	}	
-	public static function deleteJsonFile($file_name=NULL)
-	{
-		if($file_name){
-			unlink('data/'.$file_name.'.json');
-			return true;
-		}else if(file_exists('data')){
-			$dir = scandir('data');
-			foreach($dir as $elem){
-				echo $elem.'<br />';
-				if($elem != "." && $elem != ".."){
-					unlink('data/'.$elem);
-				}
-			}
-		}
-	}
-	public static function recursiveParseArray($array)
+	public static function recursiveEchoParseArray($array)
 	{
 		foreach($array as $key=>$a){
 			if(gettype($a) == 'string'){
 				echo $key .'=>'.$a.'<br />';
 			}else{
 				echo $key.'<br />';
-				Tools::recursiveParseArray($a);
+				Tools::recursiveEchoParseArray($a);
 			}
 		}
+	}
+	public static function arraySearch($search, $array)
+	{
+		$key = array_search($search, $array);
+		echo 'pass'.$key;
 	}
 }

@@ -1,1 +1,1 @@
-{"user1":["name","password_cripted"],"user2":["user_name","password_cripted"]}
+{"1":{"login":"name","password":"password_cripted"},"2":{"login":"user_name","password":"password_cripted"}}
