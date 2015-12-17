@@ -44,7 +44,17 @@ class Ajax
 	}
 	public function notifyAjaxAction($action)
 	{
-		
+		if($action)
+		{
+			if($action == 'login')
+			{
+
+			}
+			if($action == 'pwd')
+			{
+
+			}
+		}
 	}
 }
 $a = new Ajax();
