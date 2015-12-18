@@ -31,8 +31,6 @@ class Ajax
 	{
 		$_POST['user'] = base64_decode($_POST['user']);
 		$_POST['pwd'] = base64_decode($_POST['pwd']);
-		$this->notifyAjaxAction('login');
-		echo "login";
 	}
 	public function subscribeAjaxProcess()
 	{
@@ -41,20 +39,6 @@ class Ajax
 		echo base64_decode($_POST['name']).'<br />';
 		echo base64_decode($_POST['password']).'<br />';
 		echo "subscribe";
-	}
-	public function notifyAjaxAction($action)
-	{
-		if($action)
-		{
-			if($action == 'login')
-			{
-
-			}
-			if($action == 'pwd')
-			{
-
-			}
-		}
 	}
 }
 $a = new Ajax();

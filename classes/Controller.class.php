@@ -7,6 +7,7 @@ class Controller
 		$this->loadAllClasses();
 		//routes init
 		$this->router();
+		
 	}
 	/*
 	* 	if folder_name && class_name set -> include the specific file [TODO]

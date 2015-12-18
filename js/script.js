@@ -34,6 +34,7 @@ function sendFormAjax(arg){
 		}
 	}
 	ajax.open('POST', 'script/ajax.php', true);
+	// ajax.open('POST', 'classes/Controller.class.php', true);
 	ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	ajax.send(arg);
 }

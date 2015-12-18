@@ -17,7 +17,7 @@ class Authentification
 		// $db->callLoginProcess('satoru.hemmi@gmail.con', 'meinpassword123');
 		// $db->showCurrentUserLogged();
 	}
-	public static function login()
+	public function login()
 	{
 		$form = Authentification::$form;
 		
